@@ -1,0 +1,94 @@
+body {
+	margin:0;
+	padding:0;
+	font-family: 'Noto Sans',Arial, sans-serif;
+	background: url('./image/bg1.jpeg');
+	background-size:cover;
+}
+
+.signup-form{
+	width: 100%;
+	height: 796px;
+	max-width:430px;
+	background: #f1f1f1;
+	padding: 15px 30px;
+	box-sizing: border-box;
+	border-radius: 8px;
+	text-align: center;
+	box-shadow: 0 0 20px #000000b3;
+	vertical-align: middle;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 0;
+}
+
+.signup-form h1{
+	margin-top: 0;
+	margin-bottom: 30px;
+	/* font-weight: 200; */
+	font-family: Arial, sans-serif;
+	color:#5F4B8B;
+	font-size:40px;
+	
+}
+small{
+	font-family: 'Noto Sans',Arial, sans-serif;
+	font-size:50%;
+}
+
+.txtb{
+	border: 1px solid gray;
+	margin: 8px 0;
+	padding: 12px 18px;
+	border-radius: 8px;
+}
+
+.txtb label{
+	display: block;
+	text-align: left;
+	color: #333;
+	text-transform: uppercase;
+	font-size: 13px;
+}
+.txtb input{
+	width:100%;
+	border: none;
+	background: none;
+	outline: none;
+	font-size:15px;
+	margin-top:6px;
+}
+.btn{
+	display: inline-block;
+	background: #5F4B8B;
+	padding: 14px 0;
+	color: white;
+	text-transform: uppercase;
+	cursor: pointer;
+	margin-top: 8px;
+	width: 100%;
+	border: none;
+}
+
+.btn:hover{
+	background: #fff !important;
+	color: #5F4B8B !important;
+	font-weight:bold !important;
+	outline: 1px solid #5F4B8B !important;
+}
+
+.swal-button {
+  padding: 7px 19px;
+  border-radius: 2px;
+  background-color: #5F4B8B;
+  font-size: 12px;
+  border: 1px solid #5F4B8B;
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
+}
+
+.swal-button:hover{
+	background: #fff !important;
+	color: #5F4B8B !important;
+	font-weight:bold !important;
+	border: 1px solid #5F4B8B !important;
+}

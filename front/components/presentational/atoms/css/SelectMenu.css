@@ -1,0 +1,16 @@
+.custom-select{
+    background-color: #f6f6f6!important;
+}
+.custom-select:after{
+    background-color: #f6f6f6!important;
+}
+.custom-select option{
+    background-color: #f6f6f6!important;
+}
+.custom-select:active {
+    background-color:  #f6f6f6!important;
+}
+
+.custom-select:focus{
+    background-color: #f6f6f6!important;
+}

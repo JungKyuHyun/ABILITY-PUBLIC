@@ -1,0 +1,12 @@
+div.BoardContent {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2px;
+}
+
+.BoardHeader {
+    width: 100%;
+}
+.BoardHeader:first-child{
+    width: 50%;
+}

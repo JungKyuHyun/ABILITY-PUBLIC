@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.HashtagNicknameMapper">
+
+<!--comment  -->
+	<select id="getComment" parameterType="map" resultType="com.ability.dto.custom.HashtagComment">
+		select distinct u.nick_name as comment ,u.user_image as image , u.userid as id
+		from reply_comment rc left join reply r 
+			 on rc.reply_id = r.id 
+			 join post_board p 
+			 on r.board_id = p.id 
+			 join user u 
+			 on rc.userid = u.userid 
+		where p.id=#{seq}
+	</select>
+
+<!-- reply -->
+	<select id="getReply" parameterType="map" resultType="com.ability.dto.custom.HashtagReply">
+		select distinct u.nick_name as reply ,u.user_image as image, u.userid as id
+		from post_board p join reply r on p.id=r.board_id
+			 join user u on r.userid=u.userid
+		where p.id =#{seq}
+	</select>
+	
+	
+</mapper>

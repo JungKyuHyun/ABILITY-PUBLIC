@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.ReplyMapper">
+<select id="listSelect" parameterType="map" resultType="com.ability.dto.custom.ReplyCustom">
+		select r.id 'id',
+		r.date_created 'date_created',
+		r.reply_content 'reply_content', 
+		(select ifnull(sum(counta),0) from reply_vote where category_id=1 and reply_id = r.id) 'vote_count',
+		u.user_image 'user_image', 
+		u.nick_name 'nick_name', 
+		u.userid 'userid'
+		
+		from reply r
+		left join user u
+		on r.userid = u.userid 
+		where r.category_id=1  and r.enabled=1 and r.board_id = #{id}
+</select>
+<insert id="view_count">
+	update post_board set view_count = view_count+1 where id= #{id}
+</insert>
+<insert id="insertReply" parameterType="map">
+	insert into reply (
+		category_id, 
+		board_id, 
+		userid, 
+		reply_content
+		) values(1,
+				#{board_id},
+				#{userid},
+				#{reply_content}
+		)
+</insert>
+<update id="updateReply" parameterType="map">
+	update reply set 
+		reply_content=#{reply_content}
+        where id=#{id}
+</update>
+
+<update id="deleteReply" parameterType="map">
+	update reply set enabled=0 where id =#{id} 
+</update>
+
+<select id="checkReplyVote" resultType="int">
+		select ifnull(sum(counta), 0) 'counta' 
+			from reply_vote 
+			where voter=#{userid} and reply_id=#{seq} and category_id=#{category_id}
+	</select>
+	
+	<insert id="insertReplyVote">
+		insert into reply_vote(reply_id, voter, counta, category_id) 
+		values(#{seq}, #{userid}, #{counta}, #{category_id})
+	</insert>
+	
+	<delete id="cancelReplyVote">
+		delete from reply_vote
+		where reply_id = #{seq} and voter=#{userid} and category_id=#{category_id}
+	</delete>
+	<select id="getModifyContent" resultType="com.ability.dto.Reply">
+		select * 
+		from reply 
+		where id = #{seq}
+	</select>
+	<update id="setModifyReplyOk">
+		update reply
+			set
+				reply_content=#{reply_content}
+			where id=#{seq} and category_id=#{category_id}
+	</update>
+	
+	<select id="listSelectOne" parameterType="map" resultType="com.ability.dto.Reply">
+		select reply_content 'reply_content', userid 'userid', id 'id' 
+			from reply
+			where id = #{id}
+	</select>
+	<select id="checkReplyVoteByUserid" parameterType="map" resultType="com.ability.dto.Reply_Vote">
+		select voter 'voter', reply_id 'reply_id', counta 'counta'
+		 	from reply_vote 
+		 	where reply_id=#{seq} and voter=#{userid}
+	</select>
+</mapper>

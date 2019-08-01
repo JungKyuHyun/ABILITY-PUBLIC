@@ -1,0 +1,100 @@
+.SighForm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 4px;
+   }
+
+   .btn-primary {
+    background-color : #5f4b8b;
+    border-color: #5F4B8B;
+    color : white;
+    box-shadow: 2px 2px 4px grey;
+    width : 90.5px;
+   }
+   
+   .btn-primary:hover {
+    background-color :white;
+    border-color: #5F4B8B;
+    color : #5F4B8B;
+}
+.btn.btn-primary:active {
+    background-color : #5f4b8b!important;
+    color : white;
+    
+}
+.btn.btn-primary:focus{
+    outline-color: black
+}
+
+.btn-secondary {
+    color : white;
+    box-shadow: 2px 2px 4px grey;
+    width : 90.5px;
+   }
+   
+.btn-secondary:hover {
+    background-color :white;
+    color:#6c757d;
+}
+ .btn-secondary:active {    
+    color : white;    
+}
+.btn-secondary:visited {
+    background-color: #636e72!important;
+    border-color: #ADB3B9!important;
+    color : white!important;
+}
+
+.btn-success {
+    background-color :white;
+    border-color: #ADB3B9;
+    color : #6F7780;
+    height: 33px;
+    text-align: center;
+    font-size: 13px;
+   }
+   
+.btn-success:hover {
+    background-color :#dfe6e9;
+    border-color: #ADB3B9;
+    color : black;
+}
+ .btn-success:active {
+    background-color : #b2bec3!important;
+    color : white;
+    border-color: #ADB3B9!important;
+}
+.btn-success:visited {
+    background-color: #636e72!important;
+    border-color: #ADB3B9!important;
+    color : white!important;
+}
+
+.usercard:hover {
+    background-color: #F3F8FA;
+    border-color: #F3F8FA!important;
+}
+#Sihgup {
+        margin-left: 1em;
+        }
+@media screen and (max-width: 767px){ 
+    div.SighForm {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 5px;
+        position: absolute;
+        left: 60%;
+        top: 1.5%;
+      }
+}
+
+@media screen and (max-width : 480px) {
+    div.SighForm {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 5px;
+        position: absolute;
+        left: 180px;
+        top: 1.5%;
+      }
+}

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.ProjectMapper">
+	<select id="getProjectList" parameterType="map" resultType="com.ability.dto.custom.ProjectBoardList">
+		select ifnull(p.file_path, 0) 'file_path'
+				, p.id 'id'
+				, p.date_created 'date_created'
+				, p.view_count 'view_count'
+				, p.title 'title'
+				, ifnull(p.content, 0) 'content'
+				, ifnull(p.tags, 0) 'tags'
+				, u.userid as userid
+				, u.nick_name 'nick_name', u.reputation 'reputation'
+				, (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount'	
+		from post_board p
+		left join user u on p.userid = u.userid        
+		where p.enabled=1 
+			and p.closed=1 
+			and category_id=${category} 
+			and u.enabled=1
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by likecount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="getSearchResult" parameterType="map" resultType="com.ability.dto.custom.ProjectBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.file_path 'file_path', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid
+		where p.enabled=1 and p.closed=1 and category_id=${category} and u.enabled=1 
+			and p.title like '%${word}%'
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<insert id="insertProjectBoard">
+		<if test='!tags.equals("null")'>
+		insert into post_board(category_id, 
+							   title, 
+							   userid, 
+							   content, 
+							   tags, 
+							   file_path)
+					values(2,						   
+						   #{title},
+						   #{userid},
+						   #{content},
+						   #{tags},
+						   #{file_path})
+		</if>
+		<if test="tags.equals('null')">
+			insert into post_board(category_id,	userid,	title, content, file_path)
+			values(2, #{userid}, #{title}, #{content}, #{file_path})
+		</if>
+	</insert>
+	
+	<select id="getTotalBoardContentCount" resultType="int">
+		select count(id) as counta 
+		from post_board 
+		where category_id=#{category_id} and enabled=1 and closed=1
+	</select>
+	
+	<select id="getTotalBoardSearchContentCount" resultType="int">
+		select count(id) as counta 
+		from post_board 
+		where category_id=#{category_id} and enabled=1 and closed=1 and title like concat('%',#{word},'%')
+	</select>
+	
+	<select id="listDetail" parameterType="map" resultType="com.ability.dto.custom.ProjectBoardList">
+	select ifnull(p.file_path, 0) 'file_path',
+		   p.id 'id', p.title 'title',		   
+		   p.view_count 'view_count', 
+		   u.nick_name 'nick_name', 
+		   p.content 'content',
+		   p.tags 'tags',
+		   u.user_image 'user_image',
+		   u.userid 'userid',
+		   p.date_created 'date_created',
+		   u.reputation 'reputation',
+		   		(select ifnull(sum(counta),0) 
+					from post_vote where post_id=p.id) 'likecount' 
+					from post_board p left join 
+						user u on  p.userid = u.userid 
+							where id =#{id} and category_id=2 and p.enabled=1
+	</select>
+	
+	<update id="updateProjectBoard" parameterType="map">
+		update post_board 
+			set title = #{title}, tags= #{tags}, 
+			content = #{content}, file_path = #{file_path}
+		where id =#{id} and category_id=2
+	</update>
+	
+	<update id="updateViewCount">
+		update post_board 
+			set 
+				view_count = view_count+1
+		where id=#{id} 
+	</update>
+	
+	<select id="getModifyContent" resultType="com.ability.dto.custom.ProjectBoardModify">
+		select title, content, tags, file_path
+		from post_board 
+		where id = #{seq}
+	</select>
+	
+	<select id="getReply" resultType="com.ability.dto.custom.ReplyBoard">
+		select u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',
+					 r.date_created 'date_created', r.userid 'userid', 
+					r.reply_content 'reply_content', (select ifnull(sum(counta),0) from reply_vote where category_id=2 and reply_id = r.id) 'vote_count',
+					r.id 'reply_id'
+		from reply r 
+			left join post_board p  	on p.id = r.board_id 
+			left join user u		    on r.userid= u.userid
+	        left join reply_vote rv     on r.id = rv.reply_id
+		where u.enabled=1 and r.enabled=1 and r.category_id=2 and p.id=#{seq} 
+	</select>
+	
+	<insert id="setReply">
+		insert into 
+			reply(category_id, board_id, userid, reply_content) 
+			values(2, #{seq}, #{userid}, #{reply})		
+	</insert>
+	
+	<insert id="setComment">
+		insert into 
+			reply_comment(category_id,reply_id, userid, comment_content) 
+			values(2, #{replyid}, #{userid}, #{comment})
+	</insert>
+	
+	<select id="getCommentList" resultType="com.ability.dto.custom.ProjectBoardComment">
+	select rc.id 'id', rc.reply_id 'reply_id', rc.userid 'userid', rc.date_created 'date_created',
+	 	rc.comment_content 'comment_content', u.reputation 'reputation', u.nick_name 'nick_name',
+		(select ifnull(sum(counta),0) from comment_vote where category_id=2 and comment_id = rc.id) 'counta'
+	from reply_comment rc 
+		left join reply r on rc.reply_id=r.id
+    	left join user u on u.userid = rc.userid
+	where rc.reply_id=#{replyid} and rc.enabled=1
+	</select>
+	
+	<select id="checkPostVote" resultType="int">
+		select ifnull(sum(counta), 0) 'counta' 
+			from post_vote 
+			where voter=#{userid} and post_id=#{seq}
+	</select>
+	
+	<insert id="insertPostVote">
+		insert into post_vote(post_id, voter, counta) 
+		values(#{seq}, #{userid}, #{counta})
+	</insert>
+	
+	<delete id="cancelPostVote">
+		delete from post_vote
+		where post_id = #{seq} and voter=#{userid}
+	</delete>
+	
+	<update id="fakeDelete">
+		update post_board
+			set 
+				enabled=0
+		where id = #{seq}
+	</update>
+	
+	<update id="fakeReplyDelete">
+		update reply
+			set 
+				enabled=0
+		where id = #{seq} and category_id=#{category_id}
+	</update>
+	
+	<update id="fakeCommentDelete">
+		update reply_comment
+			set 
+				enabled=0
+		where id = #{seq} and category_id=#{category_id}
+	</update>
+	
+	<select id="checkPostReplyVote" resultType="int">
+		select ifnull(sum(counta), 0) 'counta' 
+			from reply_vote 
+			where voter=#{userid} and reply_id=#{seq} and category_id=#{category_id}
+	</select>
+	
+	<insert id="insertPostReplyVote">
+		insert into reply_vote(reply_id, voter, counta, category_id) 
+		values(#{seq}, #{userid}, #{counta}, #{category_id})
+	</insert>
+	
+	<delete id="cancelPostReplyVote">
+		delete from reply_vote
+		where reply_id = #{seq} and voter=#{userid} and category_id=#{category_id}
+	</delete>
+	
+	<update id="projectBoardCommentModify">
+		update reply_comment
+			set
+				comment_content = #{content}
+		where id=#{commentid} and category_id=#{category_id}
+				
+	</update>
+	
+	<select id="checkPostCommentVote" resultType="int">
+		select ifnull(sum(counta), 0) 'counta' 
+			from comment_vote 
+			where voter=#{userid} and comment_id=#{seq} and category_id=#{category_id}
+	</select>
+	
+	<insert id="insertPostCommentVote">
+		insert into comment_vote(comment_id, voter, counta, category_id) 
+		values(#{seq}, #{userid}, #{counta}, #{category_id})
+	</insert>
+	
+	<delete id="cancelPostCommentVote">
+		delete from comment_vote
+		where comment_id = #{seq} and voter=#{userid} and category_id=#{category_id}
+	</delete>
+	
+	<insert id="setPostBoardMark">
+		insert into scrap(userid, category_id, boardid) values( #{userid}, #{category_id}, #{seq} )
+	</insert>
+	
+	<delete id="cancelPostMark">
+		delete from scrap
+		where userid=#{userid} and boardid=#{seq} and category_id=#{category_id}
+	</delete>
+	
+	<select id="checkPostBoardMark" resultType="int">
+		select ifnull(count(id), 0) 'counta' 
+			from scrap
+			where userid=#{userid} and boardid=#{seq} and category_id=#{category_id}
+	</select>
+	
+</mapper>

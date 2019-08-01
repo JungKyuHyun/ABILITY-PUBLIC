@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.DeveloperMapper">
+	<select id="listSelect" parameterType="map" resultType="com.ability.dto.custom.DeveloperDetailList">
+		<![CDATA[
+			select u.userid as userid, u.email as email, u.password as password, u.nick_name as nick_name, u.name as name, u.area as area,
+			u.date_created as date_created, u.last_updated as last_updated, u.reputation as reputation,
+			u.user_image as user_image, d.tel as tel, d.user_info as user_info, d.tags as tags, r.role_name as role_name
+			from user u 
+			left join user_detail d 
+			on u.userid=d.userid join role r on u.userid=r.userid
+			where u.userid=#{userid} and enabled=1 and confirm=1
+		]]>
+	</select>	
+	
+	<!-- <select id="getDeveloperListByAbility" resultType="com.ability.dto.custom.DeveloperDetailList">
+	 <![CDATA[
+	  select u.userid as userid, u.user_image as user_image, u.nick_name as nick_name, u.area as area, u.reputation as reputation, d.tags as tags
+	  from user u
+	  left join user_detail d
+	  on u.userid=d.userid 
+	  where enabled=1
+	  order by reputation desc
+	 ]]>
+	</select>
+	
+	<select id="getDeveloperListByUser" resultType="com.ability.dto.custom.DeveloperDetailList">
+	 <![CDATA[
+	  select u.userid as userid, u.user_image as user_image, u.nick_name as nick_name, u.area as area, u.reputation as reputation, d.tags as tags
+	  from user u
+	  left join user_detail d
+	  on u.userid=d.userid 
+	  where enabled=1
+	  order by u.date_created desc
+	 ]]>
+	</select>
+	
+	<select id="getDeveloperListByName" resultType="com.ability.dto.custom.DeveloperDetailList">
+	 <![CDATA[
+	  select u.userid as userid, u.user_image as user_image, u.nick_name as nick_name, u.area as area, u.reputation as reputation, d.tags as tags
+	  from user u
+	  left join user_detail d
+	  on u.userid=d.userid 
+	  where enabled=1
+	  order by u.nick_name
+	 ]]>
+	</select> -->
+	
+	<select id="getQuestionList" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+	 <![CDATA[
+	  select b.id as id, b.userid as userid, b.date_created as date_created, b.title as title, b.category_id as category_id, 
+      b.tags as tags, u.nick_name as nick_name, u.reputation as reputation, u.user_image as user_image
+	  from post_board b join user u on b.userid=u.userid
+	  where u.userid=#{userid} and b.category_id=1 and b.enabled=1
+	  order by b.date_created desc limit ${start},${end}
+	 ]]>
+	</select>
+	
+	<select id="getAnswerList" parameterType="map" resultType="java.util.HashMap" >
+	 <![CDATA[
+	  select r.board_id as board_id, r.userid as userid, r.category_id as category_id,
+      r.reply_content as reply_content, r.date_created as date_created,
+      u.nick_name as nick_name, u.reputation as reputation, u.user_image as user_image
+	  from reply r join user u on r.userid=u.userid
+	  where r.userid=#{userid} and r.category_id=1 and r.enabled=1
+	  order by r.date_created desc limit ${start},${end}
+	 ]]>
+	</select>
+	
+<!-- 	<select id="getCommentList" parameterType="map" resultType="com.ability.dto.custom.DeveloperPost">
+	 <![CDATA[
+	  select b.id as id, b.category_id as category_id, b.tags as tags,
+	  c.reply_id as reply_id, c.userid as userid, c.comment_content as comment_content,
+	  r.reply_content as reply_content, c.date_created as date_created,
+      u.nick_name as nick_name, u.reputation as reputation, u.user_image as user_image
+      from post_board b join reply r on b.id=r.board_id join reply_comment c on r.id=c.reply_id join user u on b.userid=u.userid
+      where r.userid=#{userid} and b.category_id=1
+      order by b.id desc limit ${start},${end}
+	 ]]>
+	</select> -->
+	
+	<select id="getPostCount" parameterType="map" resultType="com.ability.dto.custom.DeveloperPostCount">
+	 <![CDATA[
+	  select count(*) as board_count, 
+	  	(select count(*) from reply where userid=#{userid} and enabled=1 and category_id=1) as reply_count, 
+	  	(select count(*) from reply_comment where userid=#{userid} and enabled=1 and category_id=1) as comment_count 
+	  from post_board
+	  where userid=#{userid} and category_id=1 and enabled=1
+	 ]]>
+	</select>
+	
+	<select id="searchDeveloper" parameterType="String" resultType="com.ability.dto.custom.DeveloperDetailList">
+	<![CDATA[
+	select u.userid as userid, u.user_image as user_image, u.nick_name as nick_name, u.area as area, u.reputation as reputation, d.tags as tags
+	  from user u
+	  left join user_detail d
+	  on u.userid=d.userid where u.nick_name like '%${value}%' and enabled=1
+	 ]]>
+	</select>
+	
+	<select id="searchDeveloperByTags" parameterType="String" resultType="com.ability.dto.custom.DeveloperDetailList">
+    <![CDATA[
+    select u.userid as userid, u.user_image as user_image, u.nick_name as nick_name, u.area as area, u.reputation as reputation, d.tags as tags
+      from user u
+      left join user_detail d
+      on u.userid=d.userid where d.tags like '%${value}%' and enabled=1
+     ]]>
+    </select>
+	
+	<update id="getdeveloperUpdate" parameterType="map">
+	<![CDATA[
+		update user u left join user_detail d 
+			on u.userid=d.userid
+            set area=#{area},
+                    tel=#{tel},
+                    user_info=#{user_info},
+                    tags=#{tags}
+			where u.userid=#{userid}
+	]]>
+	</update>
+	
+	<insert id="getdeveloperInsert" parameterType="map">
+	<![CDATA[
+		insert into user_detail (userid) value (#{userid})
+		]]>
+	</insert>
+	
+	<select id="getdeveloperSelect" parameterType="map" resultType="java.lang.Integer">
+	<![CDATA[
+		select count(*) from user_detail where userid=#{userid}
+	 ]]>
+	</select>
+	
+	<update id="getEnabled" parameterType="map">
+	<![CDATA[
+		update user set enabled=0 where userid=#{userid}
+	]]>
+	</update>
+	
+	<update id="getPasswordChange" parameterType="map">
+	<![CDATA[
+		update user set password=#{password} where userid=#{userid}
+	]]>
+	</update>
+	
+	<select id="getPasswordOk" parameterType="String" resultType="String"> 
+	<![CDATA[
+		select password from user where userid=#{userid}
+	]]>
+	</select>
+	
+	<update id="getImageChange" parameterType="map">
+	<![CDATA[
+		update user set user_image=#{user_image} where userid=#{userid}
+	]]>
+	</update>
+	
+	<select id="getPostChart" parameterType="map" resultType="java.util.HashMap">
+	<![CDATA[
+	 	select DATE_FORMAT(date_created, '%y.%m.%d') as boardDay, category_id, count(category_id) as postCount
+        from post_board 
+        where date(date_created) > date_add(now(),interval -7 day) and userid=#{userid} and enabled=1
+        group by boardDay, category_id
+	]]>
+	</select>
+	
+	
+	
+	<!-- 게시판 -->
+	<select id="getTotalBoardContentCount" parameterType="map" resultType="int">
+		select count(id) as counta 
+		from post_board 
+		where category_id=#{categoryid} and enabled=1 and closed=1 and userid=#{userid}
+	</select>
+	
+	<select id="getTotalBoardSearchContentCount" resultType="int">
+		select count(id) as counta 
+		from post_board 
+		where category_id=#{category_id} and enabled=1 and closed=1 and title like concat('%',#{word},'%') and userid=#{userid}
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(id) as counta 
+		from job_board 
+		where category_id=4 and enabled=1 and closed=1
+	</select>
+	
+	<select id="getTotalSearchCount" resultType="int">
+		select count(id) as counta 
+		from job_board 
+		where category_id=4 and enabled=1 and closed=1 and title like concat('%',#{content},'%')
+	</select>
+	
+	
+	<select id="getuserTotalCount" resultType="int">
+		select count(u.userid) as counta 
+		  from user u
+		  left join user_detail d
+		  on u.userid=d.userid 
+		  where enabled=1
+	</select>
+	
+	<select id="getuserSearchTotalCount" resultType="int">
+		select count(u.userid) as counta 
+		  from user u
+		  left join user_detail d
+		  on u.userid=d.userid 
+		  <choose>
+				<when test="dropdown == 1">
+					where enabled=1 and u.nick_name like concat('%',#{content},'%')
+				</when>
+				<when test="dropdown == 2">
+					where enabled=1 and d.tags like concat('%',#{content},'%')
+				</when>
+			</choose>
+	</select>
+
+	<select id="SeachList" parameterType="map" resultType="com.ability.dto.custom.DeveloperDetailList">
+		select u.userid as userid, u.user_image as user_image, u.nick_name as nick_name, u.area as area, u.reputation as reputation, d.tags as tags
+		  from user u
+		  left join user_detail d
+		  on u.userid=d.userid 
+		  <choose>
+				<when test="dropdown == 1">
+					where enabled=1 and u.nick_name like concat('%',#{content},'%')
+				</when>
+				<when test="dropdown == 2">
+					where enabled=1 and d.tags like concat('%',#{content},'%')
+				</when>
+			</choose>
+	</select>
+
+	<select id="getMemberPostList" parameterType="map" resultType="com.ability.dto.custom.DeveloperDetailList">
+		select u.userid as userid, u.user_image as user_image, u.nick_name as nick_name, u.area as area, 
+        u.reputation as reputation, d.tags as tags, r.role_name as role_name
+		  from user u
+		  left join user_detail d 
+		  on u.userid=d.userid left join role r on u.userid=r.userid where u.enabled=1
+			<choose>
+				<when test="view == 0">
+					order by u.reputation desc limit ${start},${end}
+				</when>
+				<when test="view == 1">
+					order by u.date_created desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by u.nick_name asc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select> 
+	
+	
+	
+	<select id="getCommunityList" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid
+         where p.enabled=1 and p.closed=1 and category_id=${category} and u.enabled=1 and p.userid=#{userid}
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select> 
+	
+	<select id="getSearchResult" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid
+	     where p.enabled=1 and p.closed=1 and category_id=${category} and u.enabled=1 
+		 and p.title like '%${word}%' and p.userid=#{userid}
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="getProjectList" parameterType="map" resultType="com.ability.dto.custom.ProjectBoardList">
+		select ifnull(p.file_path, 0) 'file_path'
+				, p.id 'id'
+				, p.date_created 'date_created'
+				, p.view_count 'view_count'
+				, p.title 'title'
+				, ifnull(p.content, 0) 'content'
+				, ifnull(p.tags, 0) 'tags'
+				, u.nick_name 'nick_name', u.reputation 'reputation'
+				, (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount'
+		from post_board p
+		left join user u on p.userid = u.userid 
+         where p.enabled=1 and p.closed=1 and category_id=${category} and u.enabled=1 and p.userid=#{userid}
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by likecount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="getProjectSearchResult" parameterType="map" resultType="com.ability.dto.custom.ProjectBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.file_path 'file_path', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid
+	     where p.enabled=1 and p.closed=1 and category_id=${category} and u.enabled=1 
+		 and p.title like '%${word}%' and p.userid=#{userid}
+			<choose>
+				<when test='orderby == "0" '>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="getPostListMark" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid left join scrap s on p.id=s.boardid
+         where p.enabled=1 and p.closed=1 and p.category_id=${category} and u.enabled=1 and s.userid=#{userid} and s.id is not null
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select> 
+	
+	<select id="getSearchResultMark" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image', u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p 
+		left join user u on p.userid = u.userid left join scrap s on p.id=s.boardid
+	     where p.enabled=1 and p.closed=1 and p.category_id=${category} and u.enabled=1 
+		 and p.title like '%${word}%' and s.userid=#{userid} and s.id is not null
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="getProjectMarkList" parameterType="map" resultType="com.ability.dto.custom.ProjectBoardList">
+		select ifnull(p.file_path, 0) 'file_path'
+				, p.id 'id'
+				, p.date_created 'date_created'
+				, p.view_count 'view_count'
+				, p.title 'title'
+				, ifnull(p.content, 0) 'content'
+				, ifnull(p.tags, 0) 'tags'
+				, u.nick_name 'nick_name', u.reputation 'reputation'
+				, (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount'	
+		from post_board p
+		left join user u on p.userid = u.userid left join scrap s on p.id=s.boardid
+         where p.enabled=1 and p.closed=1 and p.category_id=${category} and u.enabled=1 and s.userid=#{userid} and s.id is not null
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by likecount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="getProjectSearchMarkResult" parameterType="map" resultType="com.ability.dto.custom.ProjectBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.file_path 'file_path', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid left join scrap s on p.id=s.boardid
+	     where p.enabled=1 and p.closed=1 and p.category_id=${category} and u.enabled=1 
+		 and p.title like '%${word}%' and s.userid=#{userid} and s.id is not null
+			<choose>
+				<when test='orderby == "0" '>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="getJobBoardList" parameterType="map" resultType="com.ability.dto.custom.HireBoardList">
+    		select j.id 'id'
+			   ,j.title 'title'
+	           ,j.job_type 'job_type'
+	           ,c.company_area 'area'
+	           ,j.tags 'tags'
+	           ,j.view_count 'view_count'
+	           ,j.subtitle 'subtitle'
+	           ,j.date_created 'date_created'
+	           ,j.userid 'userid'
+	           ,j.period 'period'
+	           ,c.company_name 'company_name'
+	           ,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id) 'allscrap'
+	           ,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and category_id=4 and boardid=j.id) 'scrap'  
+		from job_board j
+	    left join user_company_detail c
+	    on j.userid = c.userid
+          where enabled=1 and closed=1 and j.userid=#{userid} 
+			<choose>
+				<when test='orderby == "0" '>
+					order by j.date_created desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by j.view_count desc limit ${start},${end}
+				</when>
+			</choose>
+	</select>
+	
+	<select id="getJobSearchResult" parameterType="map" resultType="com.ability.dto.custom.HireBoardList">
+        		select j.id 'id'
+			   ,j.title 'title'
+	           ,j.job_type 'job_type'
+	           ,c.company_area 'area'
+	           ,j.tags 'tags'
+	           ,j.view_count 'view_count'
+	           ,j.subtitle 'subtitle'
+	           ,j.date_created 'date_created'
+	           ,j.userid 'userid'
+	           ,j.period 'period'
+	           ,c.company_name 'company_name'
+	           ,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id) 'allscrap'
+	           ,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and category_id=4 and boardid=j.id) 'scrap'  
+		from job_board j
+	    left join user_company_detail c
+			    on j.userid = c.userid
+		        where enabled=1 and closed=1 and j.title like '%${word}%' and j.userid=#{userid}
+		    <choose>
+				<when test='orderby == "0" '>
+					order by j.date_created desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by j.view_count desc limit ${start},${end}
+				</when>
+			</choose>
+	</select>
+	
+	<select id="getJobBoardMarkList" parameterType="map" resultType="com.ability.dto.custom.HireBoardList">
+    		select j.id 'id'
+			   ,j.title 'title'
+	           ,j.job_type 'job_type'
+	           ,c.company_area 'area'
+	           ,j.tags 'tags'
+	           ,j.view_count 'view_count'
+	           ,j.subtitle 'subtitle'
+	           ,j.date_created 'date_created'
+	           ,j.userid 'userid'
+	           ,j.period 'period'
+	           ,c.company_name 'company_name'
+	           ,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id) 'allscrap'
+	           ,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and category_id=4 and boardid=j.id) 'scrap'  
+		from job_board j
+	    left join user_company_detail c
+	    on j.userid = c.userid left join scrap s on j.id=s.boardid
+          where enabled=1 and closed=1 and s.userid=#{userid} and s.id is not null
+			<choose>
+				<when test='orderby == "0" '>
+					order by j.date_created desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by j.view_count desc limit ${start},${end}
+				</when>
+			</choose>
+	</select>
+	
+	<select id="getJobSearchMarkResult" parameterType="map" resultType="com.ability.dto.custom.HireBoardList">
+        		select j.id 'id'
+			   ,j.title 'title'
+	           ,j.job_type 'job_type'
+	           ,c.company_area 'area'
+	           ,j.tags 'tags'
+	           ,j.view_count 'view_count'
+	           ,j.subtitle 'subtitle'
+	           ,j.date_created 'date_created'
+	           ,j.userid 'userid'
+	           ,c.company_name 'company_name'
+	           ,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id) 'allscrap'
+	           ,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and category_id=4 and boardid=j.id) 'scrap'  
+				from job_board j
+			    left join user_company_detail c
+			    on j.userid = c.userid left join scrap s on j.id=s.boardid
+		        where enabled=1 and closed=1 and j.title like '%${word}%' and s.userid=#{userid} and s.id is not null
+		    <choose>
+				<when test='orderby == "0" '>
+					order by j.date_created desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by j.view_count desc limit ${start},${end}
+				</when>
+			</choose>
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 기업회원  -->
+	<select id="CompanylistSelect" parameterType="map" resultType="java.util.HashMap">
+		<![CDATA[
+			select u.userid as userid, u.email as email, u.password as password, u.nick_name as nick_name, u.name as name,
+	         u.date_created as udate_created, u.last_updated as ulast_updated, u.reputation as reputation, 
+	         u.area as area, u.user_image as user_image,
+	         c.company_email as company_email, c.company_name as company_name, c.company_tel as company_tel, c.company_area as company_area,
+	         c.logo as logo, c.register_number as register_number, c.register_file as register_file, c.homepage_url as homepage_url,
+	         ifnull(c.company_info,"") as company_info, c.date_created as cdate_created, c.last_updated as clast_updated,
+	         c.xloc as xloc, c.yloc as yloc, c.resume as resume
+	        from user u join user_company_detail c on u.userid=c.userid 
+	        where c.userid=#{userid};
+		]]>
+	</select>	
+	
+	<select id="userCompanyBoard" parameterType="map" resultType="com.ability.dto.custom.HireBoardList">
+    		select j.id 'id'
+			   ,j.title 'title'
+	           ,j.job_type 'job_type'
+	           ,c.company_area 'area'
+	           ,j.tags 'tags'
+	           ,j.view_count 'view_count'
+	           ,j.subtitle 'subtitle'
+	           ,j.date_created 'date_created'
+	           ,j.userid 'userid'
+	           ,c.company_name 'company_name'
+	           ,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id) 'allscrap'
+	           ,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and category_id=4 and boardid=j.id) 'scrap'  
+		from job_board j
+	    left join user_company_detail c
+	    on j.userid = c.userid
+		where j.enabled=1 and j.closed=1 and j.userid=#{userid}
+			<choose>
+				<when test='orderby == "0" '>
+					order by j.date_created desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by j.view_count desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by j.date_created desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<update id="companyProfile" parameterType="map">
+	<![CDATA[
+		update user_company_detail 
+		set company_tel=#{company_tel}, 
+			company_email=#{company_email}, 
+			company_area=#{company_area}, 
+			homepage_url=#{homepage_url},  
+			company_info=#{company_info},
+			xloc=#{xloc},
+			yloc=#{yloc}
+		where userid=#{userid}
+	]]>
+	</update>
+	
+	<update id="companyLoc" parameterType="map">
+	<![CDATA[
+		update user_company_detail 
+		set xloc=#{xloc}, 
+			yloc=#{yloc}
+		where userid=#{userid}
+	]]>
+	</update>
+	
+</mapper>

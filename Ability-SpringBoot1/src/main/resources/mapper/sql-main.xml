@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.MainMapper">
+
+	<select id="getPostBoardAllTags" resultType="string">
+		select lower(tags) from post_board 
+		where ( nullif(tags,'') is not NULL ) and ( date_created > date_add(now(), interval -1 hour) )
+	</select>
+
+	<select id="getJobBoardAllTags" resultType="string">
+		select lower(tags) from job_board 
+		where ( nullif(tags,'') is not NULL ) and ( date_created > date_add(now(), interval -1 hour) )
+	</select>
+	
+	<select id="getUserDetailAllTags" resultType="string">
+		select lower(ud.tags)
+			from user_detail ud 
+		    left join user u 
+			on ud.userid = u.userid
+		where ( nullif(ud.tags,'') is not NULL ) and ( u.date_created > date_add(now(), interval -1 hour) )
+	</select>
+	
+	<insert id="setTags">
+		insert into tags(tag_name, tag_info) values(#{tags}, #{count})
+	</insert>
+	
+	<select id="getCommunityList" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid
+		where p.enabled=1 and p.closed=1 and category_id=${category} and u.enabled=1
+		order by p.id desc limit 0,12
+	</select>
+	
+	<select id="listSelect" parameterType="map" resultType="com.ability.dto.custom.ProjectBoardList">
+		select ifnull(p.file_path, 0) 'file_path'
+				, p.id 'id'
+				, p.date_created 'date_created'
+				, p.view_count 'view_count'
+				, p.title 'title'
+				, ifnull(p.content, 0) 'content'
+				, ifnull(p.tags, 0) 'tags'
+				, u.nick_name 'nick_name', u.reputation 'reputation'
+				, (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount'	
+		from post_board p
+		left join user u on p.userid = u.userid        
+		where p.enabled=1 
+			and p.closed=1 
+			and category_id=${category} 
+			and u.enabled=1
+		order by p.id desc limit 0,6
+	</select>	
+	
+	<select id="getBannerList" resultType="com.ability.dto.Banner">
+		select id, date_created, last_updated, title, banner_desc, connect_url, enabled, client, file_path
+		from banner
+		where enabled=1
+		order by id desc limit 0,3
+	</select>
+	
+</mapper>

@@ -1,0 +1,249 @@
+import React,{useState,useEffect,useCallback} from 'react';	
+import HireList from '../../presentational/molecules/HireList';	
+import {Row,Col, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';	
+import { UserSearchbarComponent3 } from '../../presentational/atoms/SearchbarComponent';	
+import axios from 'axios';	
+import LodingComponent from '../../presentational/atoms/LodingComponent';	
+import Page from '../../presentational/molecules/Page';	
+import swal from 'sweetalert';	
+import { ButtonComponent } from '../../presentational/atoms/ButtonComponent';	
+
+
+ /**	
+ * @author 신선하	
+ * @summary	
+ * 	
+ * @author 정진호	
+ * @summary Job_Board 게시판 구현	
+ */	
+const css = {	
+  verticalAlign:"middle"	
+}	
+
+ const deleteBtn ={	
+  width:"50px",	
+  height:"30px",	
+  fontSize:"13px",	
+  marginRight:"25px",	
+  padding:"0",	
+  marginTop:"5px",	
+
+ }	
+
+ const btncss ={	
+  textAlign:"right"	
+}	
+
+ const Job = ()=>{	
+  const [searchWord, setSearchWord] = useState('');	
+  const [currentPage, setCurrentPage] = useState(1);	
+  const [isSearch, setIsSearch] = useState(0);	
+  const [isLoding, setIsLoding] = useState(false);	
+  const [dataList, setDataList] = useState([]);	
+  const [placeHolder, setPlaceHolder] = useState('공고를 검색하세요.');	
+  const [orderby, setOrderby] = useState(0);	
+  const [totalListCount, setTotalListCount] = useState(0);	
+  const [userrole,setUserrole] = useState("");	
+  const [isdelok,setIsdelok] =useState(false);	
+
+
+   const onChangeSearchInput = useCallback((e) =>{	
+    setSearchWord(e.target.value);	
+  },[searchWord]);	
+
+   const handlePageChange= useCallback((pageNumber)=> {	
+    setCurrentPage(pageNumber);	
+  },[currentPage]);	
+
+   const onKeyPressSearch = useCallback((e)=>{	
+    if(searchWord.trim().replace(' ','').length===0){	
+      setSearchWord('');	
+      setPlaceHolder('검색할 내용이 없습니다!');	
+      return;	
+    }else if(e.charCode == 13){	
+      setIsSearch(isSearch+1);	
+    }	
+  },[searchWord,placeHolder])	
+
+   const onClickSearchButton = useCallback(()=>{	
+    if(searchWord.trim().replace(' ','').length===0){	
+      setSearchWord('');	
+      setPlaceHolder('검색할 내용이 없습니다!');	
+      return;	
+    };	
+    setIsSearch(isSearch+1);	
+  },[searchWord,placeHolder]);	
+
+   const onChangeToggle = useCallback((e)=>{	
+    const str = e.pop();	
+    if(typeof str != "string"){	
+      return;	
+    }	
+    setOrderby(str);	
+    setIsSearch(0);	
+  },[orderby,isSearch]);	
+
+  const backUrl = process.env.NODE_ENV === 'production'? "?" : "?";
+
+   const onClickDeleteButton = useCallback((e)=>{	
+    let seq = e.target.id;	
+    if(orderby == 3){	
+      swal({	
+        text: "게시글을 복구하시겠습니까?",	
+        title: "게시글 복구",	
+        icon: "/static/image/Logo2.png",	
+        buttons: true	
+     })	
+     .then((recoverok)=>{	
+         if(recoverok){	
+         let form = new FormData();	
+             form.append("id",seq); 	
+               axios({	
+                method :'put',	
+                baseURL : backUrl,	
+                url :"/test/recoverjobpost",	
+                data : form	
+            }).then((res)=>{	
+                if(res.data=="success"){	
+                    swal("게시글이 복구 되었습니다.");	
+                    setIsdelok(true);	
+                }else{	
+                    swal("[Error0577] 복구 실패");	
+                }	
+            })	
+            .catch((res)=>{	
+                console.log("오류발생",res);	
+            })	
+        }	
+     },[isdelok])	
+    }else{	
+    swal({	
+      text: "게시글을 정말 삭제하시겠습니까?",	
+      title: "게시글 삭제",	
+      icon: "/static/image/Logo2.png",	
+      buttons: true	
+   })	
+   .then((deleteok)=>{	
+       if(deleteok){	
+       let form = new FormData();	
+           form.append("id",seq); 	
+             axios({	
+              method :'put',	
+              baseURL : backUrl,	
+              url :"/test/deletejobpost",	
+              data : form	
+          }).then((res)=>{	
+              if(res.data=="success"){	
+                  swal("게시글이 삭제 되었습니다.");	
+                  setIsdelok(true);	
+              }else{	
+                  swal("[Error0577] 삭제 실패");	
+              }	
+          })	
+          .catch((res)=>{	
+              console.log("오류발생",res);	
+          })	
+      }	
+   },[isdelok])	
+  }	
+  });	
+
+   useEffect( () =>{	
+    window.scrollTo(0,0);
+    setIsdelok(false);	
+    setIsLoding(true);	
+    setDataList([]);	
+    setUserrole(localStorage.getItem("role_name"));	
+    const endpoint = backUrl;	
+    axios.get(endpoint,{	
+      params : {	
+        orderby : orderby,	
+        currentpage : currentPage,	
+        userid : localStorage.getItem("userid")?localStorage.getItem("userid"):0,	
+        word: isSearch!=0 ? searchWord : "",	
+        categoryid:4	
+      }	
+    }).then((response) => {	
+      setIsLoding(false);	
+      setDataList(response.data.postBoardList);	
+      setCurrentPage(response.data.currentPage);	
+      setTotalListCount(response.data.totalListCount);	
+    })	
+    .catch((response)=>{	
+      setIsLoding(false);	
+    });	
+  },[orderby,currentPage,totalListCount,isSearch,isdelok]);	
+
+   return(	
+    <>	
+    {isLoding && <LodingComponent/>}	
+
+       { userrole == "ROLE_COMPANY" ?	
+      <>	
+      </> : 	
+      <>	
+      </>  	
+      }	
+        <Row >	
+        <Col sm={6} md={8} style={css}>	
+          <ToggleButtonGroup	
+            type="checkbox" 	
+            value={orderby}	
+            onChange={onChangeToggle}	
+          >	
+            <ToggleButton value="0" style={{backgroundColor:"#fff",color:"#5F4B8B",borderColor:"rgba(0,0,0,.125)"}} variant="dark">최신순</ToggleButton>	
+            <ToggleButton value="1" style={{backgroundColor:"#fff",color:"#5F4B8B",borderColor:"rgba(0,0,0,.125)"}} variant="dark">조회순</ToggleButton>	
+            <ToggleButton value="3" style={{backgroundColor:"#fff",color:"#5F4B8B",borderColor:"rgba(0,0,0,.125)"}}variant="dark">삭제된 게시물</ToggleButton>	
+
+         </ToggleButtonGroup>	
+
+         </Col>	
+        <Col sm={6} md={4}><UserSearchbarComponent3 onChange={onChangeSearchInput} onClick={onClickSearchButton} content={placeHolder}	
+                                                    onKeyPress={onKeyPressSearch}/></Col>	
+
+         </Row>	
+        <hr/>	
+          { dataList.length > 0 ?	
+            dataList.map((content)=>{	
+              let btnName = "";	
+              if(orderby==3){	
+                btnName = "복구";	
+              }else{	
+
+                 btnName = "삭제";	
+              }	
+              return(	
+                <div key={content.id}>	
+                      <HireList key={content.id}	
+                                seq={content.id}	
+                                event={content.period.substr(0,10)}	
+                                hireTitle2={content.title}	
+                                subCompany={content.job_type}	
+                                company={content.company_name}	
+                                subtitle={content.subtitle}	
+                                loaction={content.area} 	
+                                count={content.viewcount} 	
+                                hashtag={content.tags}	
+                                hits={content.view_count}	
+                                date={content.date_created}	
+                                allscrap={content.allscrap}	
+                                scrap={content.scrap}/>	
+                    <div style={btncss}> 	
+                   <ButtonComponent id={content.id} name={btnName} css={deleteBtn} onclick={onClickDeleteButton}/>	
+                    </div>	
+                  </div>	
+                );	
+            })	
+          : ""}	
+          <Row style={{marginTop:"1.4rem",marginBottom:"2rem",justifyContent:"center"}}>	
+            <div style={{textAlign:"center"}}>	
+              <Page currentPage={currentPage} totalListCount={totalListCount} currentPage={currentPage} handlePageChange={handlePageChange}/>	
+            </div>	
+          </Row>	
+
+     </>	
+  );	
+}	
+
+
+ export default Job;

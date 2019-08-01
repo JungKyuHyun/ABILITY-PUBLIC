@@ -1,0 +1,30 @@
+.Logo-ABILITY-Icon {
+    display: none;
+  }
+.Seach-Icon {
+    display: none;
+  }
+
+  @media screen and (max-width: 767px){
+    .Logo-ABILITY-Icon {
+        display: inline;
+        position: absolute;
+        top: 17px;
+        left : 90px;
+        z-index: 1;
+        border: 2px dashed #5e4a8a;
+        padding: 3px;
+        padding-top : 1px;
+      }
+      .Seach-Icon {
+        display: inline;
+        position: absolute;
+        top: 17px;
+        left : 130px;
+        z-index: 1;
+        border: 2px dashed #5e4a8a;
+        padding: 2px;
+        padding-top : 1px;
+      }
+
+  }

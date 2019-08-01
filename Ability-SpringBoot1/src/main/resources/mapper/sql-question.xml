@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.QuestionMapper">
+	<select id="listSelect" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid
+		where p.enabled=1 and p.closed=1 and category_id=${category} and u.enabled=1
+			<choose>
+				<when test="view == 0">
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test="view == 1">
+					order by p.view_count desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc limit ${start},${end}
+				</otherwise>
+			</choose>
+			
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(id) as counta 
+		from post_board 
+		where category_id=1 and enabled=1 and closed=1
+	</select>
+	
+	<select id="listDetail" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+	select p.id 'id', p.title 'title', 
+		   p.view_count 'view_count', 
+		   u.nick_name 'nick_name', 
+		   p.content 'content',
+		   p.tags 'tags',
+		   p.date_created 'date_created',
+		   u.reputation 'reputation',
+		   u.user_image 'user_image',u.userid as userid,
+			   (select ifnull(sum(counta),0) 
+					from post_vote where post_id=p.id) 'likecount' 
+					from post_board p left join 
+						user u on  p.userid = u.userid 
+							where id =#{id} and category_id=1
+	</select>
+	
+	
+	<insert id="insertPostBoard">
+		<if test='!tags.equals("null")'>
+		insert into post_board(
+								category_id,
+								userid,
+								title,
+								content,
+								tags
+								)
+					values(1,
+						   #{userid},
+						   #{title},
+						   #{content},
+						   #{tags}
+						   )
+		</if>
+		<if test="tags.equals('null')">
+			insert into post_board(
+								category_id,
+								userid,
+								title,
+								content
+								)
+					values(1,
+						   #{userid},
+						   #{title},
+						   #{content}
+						   )
+		</if>
+	</insert>
+	
+	<update id="updatePostBoard" parameterType="map">
+		update post_board 
+			set title = #{title}, tags= #{tags}, 
+			content = #{content} 
+				where id =#{id}
+		
+	</update>
+	
+	<update id="deletePostBoard" parameterType="map">
+			update post_board set enabled=0 where id =#{id}
+	</update>
+	
+	<select id="SeachList" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id) 'replycount'
+		from post_board p
+		left join user u on p.userid = u.userid
+		where p.enabled=1 and p.closed=1 and category_id=1 and u.enabled=1 and p.title like '%${title}%' limit 0,10
+	</select>
+	
+	<select id="checkPostVote" resultType="int">
+		select ifnull(sum(counta), 0) 'counta' 
+			from post_vote 
+			where voter=#{userid} and post_id=#{seq}
+	</select>
+	
+	<insert id="insertPostVote">
+		insert into post_vote(post_id, voter, counta) 
+		values(#{seq}, #{userid}, #{counta})
+	</insert>
+	
+	<delete id="cancelPostVote">
+		delete from post_vote
+		where post_id = #{seq} and voter=#{userid}
+	</delete>
+	
+	<insert id="setPostBoardMark">
+		insert into scrap(userid, category_id, boardid) values( #{userid}, #{category_id}, #{seq} )
+	</insert>
+	
+	<delete id="cancelPostMark">
+		delete from scrap
+		where userid=#{userid} and boardid=#{seq} and category_id=#{category_id}
+	</delete>
+	
+	<select id="checkPostBoardMark" resultType="int">
+		select ifnull(count(id), 0) 'counta' 
+			from scrap
+			where userid=#{userid} and boardid=#{seq} and category_id=#{category_id}
+	</select>
+	
+	<select id="getSearchResult" parameterType="map" resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count 'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid,
+         (select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+         (select ifnull(count(id),0) from reply where board_id = p.id and enabled=1) 'replycount',
+		 p.category_id 'category_id'
+		from post_board p
+		left join user u on p.userid = u.userid
+		where p.enabled=1 and p.closed=1 and u.enabled=1 
+			and p.title like '%${word}%'
+			<choose>
+				<when test='orderby == "0"'>
+					order by p.id desc limit ${start},${end}
+				</when>
+				<when test='orderby == "1"'>
+					order by p.view_count desc, p.id desc limit ${start},${end}
+				</when>
+				<otherwise>
+					order by replycount desc, p.id desc limit ${start},${end}
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="AllSearchCount" resultType="int">
+        select ifnull(count(p.id),0)
+			   +(select ifnull(count(p.id),0) from post_board p left join user u on p.userid=u.userid where p.category_id=2 and p.enabled=1 and p.closed=1 and u.enabled=1 and p.title like '%${word}%')
+               +(select ifnull(count(p.id),0) from post_board p left join user u on p.userid=u.userid where p.category_id=7 and p.enabled=1 and p.closed=1 and u.enabled=1 and p.title like '%${word}%') 'count'
+      from post_board p
+      left join user u
+      on p.userid = u.userid
+      where p.category_id=1 and p.enabled=1 and p.closed=1 and u.enabled=1 and p.title like '%${word}%'
+	</select>
+	
+	<select id="getTotalBoardContentCount" resultType="int">
+		select count(p.id) as counta 
+		from post_board p
+		left join user u
+		on p.userid = u.userid
+		where p.enabled=1 and p.closed=1 and p.category_id =1 and u.enabled=1
+	</select>
+	
+	<select id="getTotalBoardSearchContentCount" resultType="int">
+		select count(p.id) as counta 
+		from post_board p
+		left join user u
+		on p.userid = u.userid
+		where p.enabled=1 and p.closed=1 and u.enabled=1 and p.title like concat('%',#{word},'%')
+	</select>
+	
+</mapper>

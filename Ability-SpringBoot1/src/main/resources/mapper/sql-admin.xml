@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.AdminMapper">
+	<select id="allPostCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from post_board where enabled =1
+       ]]>
+	</select>
+
+	<select id="userCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from user where enabled =1
+       ]]>
+	</select>
+
+	<select id="leaveMember" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from user where enabled = 0
+       ]]>
+	</select>
+
+	<select id="todayJoinCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from user where date_created = date(now())
+       ]]>
+	</select>
+
+	<select id="questionCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from post_board where category_id = 1 and enabled =1
+       ]]>
+	</select>
+
+	<select id="freeboardCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from post_board where category_id = 7 and enabled =1
+       ]]>
+	</select>
+
+	<select id="projectCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from post_board where category_id = 2 and enabled =1
+       ]]>
+	</select>
+
+	<select id="accuseCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from post_board where accuse>=1 and enabled=1   
+       ]]>
+	</select>
+
+	<select id="jobCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from job_board where enabled=1   
+       ]]>
+	</select>
+
+	<select id="getDeleteCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select sum(count) count from (select count(*) as count from post_board where enabled =0 union select count(*) as count from job_board where enabled = 0) as count  
+       ]]>
+	</select>
+
+	<select id="noAnswerCount" resultType="java.lang.Integer">
+      <![CDATA[
+       select count(*) from post_board p left join reply r on p.id = r.board_id where p.enabled =1 and r.id is null  
+       ]]>
+	</select>
+
+	<select id="monthJoin"
+		resultType="com.ability.dto.custom.UserMonthlyStatistics">
+      <![CDATA[
+       SELECT CONCAT(MONTH(date_created)) monthlydate, COUNT(*) usercount FROM user GROUP BY monthlydate
+       ]]>
+	</select>
+
+	<select id="monthLeave"
+		resultType="com.ability.dto.custom.UserMonthlyStatistics">
+      <![CDATA[
+      SELECT CONCAT(MONTH(last_updated)) monthlydate, COUNT(*) usercount FROM user where enabled = 0 GROUP BY monthlydate
+       ]]>
+	</select>
+
+	<select id="getTags" resultType="java.lang.String">
+      <![CDATA[
+       select tags from user_detail
+      ]]>
+	</select>
+
+	<update id="deletePost" parameterType="java.lang.Integer">
+        <![CDATA[
+          update post_board set enabled = 0 where id = #{id}
+        ]]>
+	</update>
+
+	<update id="deleteUser" parameterType="java.lang.Integer">
+        <![CDATA[
+          update user set enabled = 0 where userid = #{id}
+        ]]>
+	</update>
+
+	<update id="recoverUser" parameterType="java.lang.Integer">
+        <![CDATA[
+          update user set enabled = 1 where userid = #{id}
+        ]]>
+	</update>
+
+	<update id="recoverPost" parameterType="java.lang.Integer">
+        <![CDATA[
+          update post_board set enabled = 1 where id = #{id}
+        ]]>
+	</update>
+
+	<update id="deleteJobPost" parameterType="java.lang.Integer">
+        <![CDATA[
+          update job_board set enabled = 0 where id = #{id}
+        ]]>
+	</update>
+
+	<update id="recoverJobPost" parameterType="java.lang.Integer">
+        <![CDATA[
+          update job_board set enabled = 1 where id = #{id}
+        ]]>
+	</update>
+
+	<select id="getPostBoard"
+		resultType="com.ability.dto.custom.PostBoardList">
+      <![CDATA[
+     select p.id 'id', p.date_created 'date_created', p.title 'title', p.tags 'tags',
+		 u.nick_name 'nick_name', u.reputation 'reputation', u.user_image 'user_image',u.userid as userid
+         from post_board p
+		 left join user u on p.userid = u.userid 
+         where category_id = #{categoryid} and p.enabled = 1
+         order by p.date_created desc
+         limit 5
+      ]]>
+	</select>
+
+	<select id="getJobBoard"
+		resultType="com.ability.dto.custom.PostBoardList">
+     <![CDATA[
+     select  j.id as id, u.userid as userid, u.user_image as user_image, j.title as title, 
+     u.reputation as reputation, j.date_created as date_created,u.nick_name as nick_name, 
+     j.tags as tags from user u left join job_board j on u.userid = j.userid where j.enabled=1 
+     order by j.date_created desc limit 5
+     
+     ]]>
+	</select>
+
+	<select id="getReplyCount"
+		resultType="com.ability.dto.custom.AnswerRate">
+       <![CDATA[
+        select month(p.date_created) monthlydate, count(distinct p.id) as postcount
+        from post_board p left join reply r on p.id = r.board_id  
+        where p.category_id=1 and p.enabled =1 and r.enabled=1 
+        GROUP BY monthlydate
+       ]]>
+	</select>
+
+	<select id="getQuestionCount"
+		resultType="com.ability.dto.custom.AnswerRate">
+       <![CDATA[
+        SELECT MONTH(date_created) monthlydate, COUNT(*) as postcount FROM post_board 
+        where category_id=1 and enabled =1  GROUP BY monthlydate
+       ]]>
+	</select>
+
+	<select id="getTotalBoardContentCount" resultType="int">
+		select
+		count(id) as counta
+		from post_board
+		where category_id=#{category_id} and enabled=1 and closed=1
+	</select>
+
+	<select id="getTotalDeleteContentCount" resultType="int">
+		select
+		count(id) as counta
+		from post_board
+		where category_id=#{category_id} and enabled=0
+	</select>
+
+	<select id="getCommunityList" parameterType="map"
+		resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count
+		'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		u.nick_name 'nick_name', u.reputation 'reputation', u.user_image
+		'user_image',u.userid as userid,
+		(select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+		(select ifnull(count(id),0) from reply where board_id = p.id and
+		enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid =
+		u.userid
+		<choose>
+			<when test='orderby == "3"'>
+				where p.enabled = 0 and category_id=${category}
+			</when>
+			<otherwise>
+				where p.enabled=1 and p.closed=1 and category_id=${category} and
+				u.enabled=1
+			</otherwise>
+		</choose>
+		<choose>
+			<when test='orderby == "0" or orderby == "3"'>
+				order by p.id desc limit ${start},${end}
+			</when>
+			<when test='orderby == "1"'>
+				order by p.view_count desc, p.id desc limit ${start},${end}
+			</when>
+			<otherwise>
+				order by replycount desc, p.id desc limit ${start},${end}
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getTotalBoardSearchContentCount" resultType="int">
+		select
+		count(id) as counta
+		from post_board
+		where category_id=#{category_id} and enabled=1 and closed=1 and title like
+		concat('%',#{word},'%')
+	</select>
+
+	<select id="getTotalUserSearchContentCount" resultType="int">
+		select
+		count(userid) as counta
+		from user
+		where enabled=1 and nick_name like concat('%',#{word},'%')
+	</select>
+
+	<select id="getTotalDeleteSearchContentCount" resultType="int">
+		select
+		count(id) as counta
+		from post_board
+		where category_id=#{category_id} and enabled=0 and title like
+		concat('%',#{word},'%')
+	</select>
+
+	<select id="getTotalDeleteUserSearchContentCount"
+		resultType="int">
+		select count(userid) as counta
+		from user
+		where enabled=0 and nick_name like concat('%',#{word},'%')
+	</select>
+
+	<select id="getSearchResult" parameterType="map"
+		resultType="com.ability.dto.custom.PostBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count
+		'view_count', p.title 'title', p.content 'content', p.tags 'tags',
+		u.nick_name 'nick_name', u.reputation 'reputation', u.user_image
+		'user_image',u.userid as userid,
+		(select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+		(select ifnull(count(id),0) from reply where board_id = p.id and
+		enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid =
+		u.userid
+		<choose>
+			<when test='orderby == "3"'>
+				where p.enabled=0 and category_id=${category}
+				and p.title like '%${word}%'
+			</when>
+			<otherwise>
+				where p.enabled=1 and p.closed=1 and category_id=${category} and
+				u.enabled=1
+				and p.title like '%${word}%'
+			</otherwise>
+		</choose>
+		<choose>
+			<when test='orderby == "0" or orderby == "3"'>
+				order by p.id desc limit ${start},${end}
+			</when>
+			<when test='orderby == "1"'>
+				order by p.view_count desc, p.id desc limit ${start},${end}
+			</when>
+			<otherwise>
+				order by replycount desc, p.id desc limit ${start},${end}
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getProjectList" parameterType="map"
+		resultType="com.ability.dto.custom.ProjectBoardList">
+		select ifnull(p.file_path, 0) 'file_path'
+		, p.id 'id'
+		, p.date_created 'date_created'
+		, p.view_count 'view_count'
+		, p.title 'title'
+		, ifnull(p.content, 0) 'content'
+		, ifnull(p.tags, 0) 'tags'
+		, u.nick_name 'nick_name', u.reputation 'reputation'
+		, (select ifnull(sum(counta),0) from post_vote where post_id=p.id)
+		'likecount'
+		from post_board p
+		left join user u on p.userid = u.userid
+		<choose>
+			<when test='orderby == "3"'>
+				where p.enabled = 0 and category_id=${category}
+			</when>
+			<otherwise>
+				where p.enabled=1 and p.closed=1 and category_id=${category} and
+				u.enabled=1
+			</otherwise>
+		</choose>
+		<choose>
+			<when test='orderby == "0" or orderby == "3"'>
+				order by p.id desc limit ${start},${end}
+			</when>
+			<when test='orderby == "1"'>
+				order by p.view_count desc, p.id desc limit ${start},${end}
+			</when>
+			<otherwise>
+				order by likecount desc, p.id desc limit ${start},${end}
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getProjectSearchResult" parameterType="map"
+		resultType="com.ability.dto.custom.ProjectBoardList">
+		select p.id 'id', p.date_created 'date_created', p.view_count
+		'view_count', p.title 'title', p.file_path 'file_path', p.content
+		'content', p.tags 'tags',
+		u.nick_name 'nick_name', u.reputation 'reputation', u.user_image
+		'user_image',u.userid as userid,
+		(select ifnull(sum(counta),0) from post_vote where post_id=p.id) 'likecount',
+		(select ifnull(count(id),0) from reply where board_id = p.id and
+		enabled=1) 'replycount'
+		from post_board p
+		left join user u on p.userid =
+		u.userid
+		<choose>
+			<when test='orderby == "3"'>
+				where p.enabled=0 and category_id=${category}
+				and p.title like '%${word}%'
+			</when>
+			<otherwise>
+				where p.enabled=1 and p.closed=1 and category_id=${category} and
+				u.enabled=1
+				and p.title like '%${word}%'
+			</otherwise>
+		</choose>
+		<choose>
+			<when test='orderby == "0" or orderby == "3"'>
+				order by p.id desc limit ${start},${end}
+			</when>
+			<when test='orderby == "1"'>
+				order by p.view_count desc, p.id desc limit ${start},${end}
+			</when>
+			<otherwise>
+				order by replycount desc, p.id desc limit ${start},${end}
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getJobBoardList" parameterType="map"
+		resultType="com.ability.dto.custom.HireBoardList">
+		select j.id 'id'
+		,j.title 'title'
+		,j.job_type 'job_type'
+		,c.company_area 'area'
+		,j.tags 'tags'
+		,j.view_count 'view_count'
+		,j.subtitle 'subtitle'
+		,j.date_created 'date_created'
+		,j.userid 'userid'
+		,j.period 'period'
+		,c.company_name 'company_name'
+		,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id)
+		'allscrap'
+		,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and
+		category_id=4 and boardid=j.id) 'scrap'
+		from job_board j
+		left join user_company_detail c
+		on j.userid = c.userid
+		<choose>
+			<when test='orderby == "3"'>
+				where enabled = 0
+			</when>
+			<otherwise>
+				where enabled=1 and closed=1
+			</otherwise>
+		</choose>
+		<if test='orderby == "0" or orderby == "3"'>
+			order by j.date_created desc limit ${start},${end}
+		</if>
+		<if test='orderby == "1"'>
+			order by j.view_count desc limit ${start},${end}
+		</if>
+	</select>
+
+	<select id="getJobSearchResult" parameterType="map"
+		resultType="com.ability.dto.custom.HireBoardList">
+		select j.id 'id'
+		,j.title 'title'
+		,j.job_type 'job_type'
+		,c.company_area 'area'
+		,j.tags 'tags'
+		,j.view_count 'view_count'
+		,j.subtitle 'subtitle'
+		,j.date_created 'date_created'
+		,j.userid 'userid'
+		,j.category_id 'category_id'
+		,j.period 'period'
+		,c.company_name 'company_name'
+		,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id)
+		'allscrap'
+		,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and
+		category_id=4 and boardid=j.id) 'scrap'
+		from job_board j
+		left join user_company_detail c
+		on j.userid = c.userid
+		<choose>
+			<when test='orderby == "3"'>
+				where enabled=0 and j.title like '%${word}%'
+			</when>
+			<otherwise>
+				where enabled=1 and closed=1 and j.title like '%${word}%'
+			</otherwise>
+		</choose>
+		<if test='orderby == "0" or orderby == "3"'>
+			order by j.title desc limit ${start},${end}
+		</if>
+		<if test='orderby == "1"'>
+			order by j.view_count desc limit ${start},${end}
+		</if>
+
+	</select>
+	<select id="getTotalCount" resultType="int">
+		select count(id) as counta
+		from job_board
+		where category_id=4 and enabled=1 and closed=1
+	</select>
+
+	<select id="getTotalSearchCount" resultType="int">
+		select count(id) as
+		counta
+		from job_board
+		where category_id=4 and enabled=1 and closed=1 and title like
+		concat('%',#{word},'%')
+	</select>
+
+
+	<select id="getUserList" parameterType="map"
+		resultType="com.ability.dto.custom.UserDetail">
+		select u.userid as userid, u.nick_name as nick_name ,r.role_name as
+		role_name , u.date_created as date_created, u.reputation as
+		reputation, u.last_updated as last_updated, u.user_image as
+		user_image, u.name as name , u.email as email
+		from user u left join
+		role r on u.userid = r.userid
+		<choose>
+			<when test='orderby == "3"'>
+				where u.enabled = 0
+			</when>
+			<otherwise>
+				where u.enabled=1
+			</otherwise>
+		</choose>
+		<choose>
+			<when test='orderby == "0" or orderby == "3"'>
+				order by u.reputation desc limit ${start},${end}
+			</when>
+			<when test='orderby == "1"'>
+				order by u.userid desc limit ${start},${end}
+			</when>
+			<otherwise>
+				order by u.nick_name limit ${start},${end}
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getUserSearchResult" parameterType="map"
+		resultType="com.ability.dto.custom.UserDetail">
+		select u.userid as userid, u.nick_name as nick_name ,r.role_name as
+		role_name , u.date_created as date_created, u.reputation as
+		reputation, u.last_updated as last_updated, u.user_image as
+		user_image, u.name as name , u.email as email
+		from user u left join role r on u.userid = r.userid
+		<choose>
+			<when test='orderby == "3"'>
+				where u.enabled=0
+				and u.nick_name like '%${word}%'
+			</when>
+			<otherwise>
+				where u.enabled=1
+				and u.nick_name like '%${word}%'
+			</otherwise>
+		</choose>
+		<choose>
+			<when test='orderby == "0" or orderby == "3"'>
+				order by u.reputation desc limit ${start},${end}
+			</when>
+			<when test='orderby == "1"'>
+				order by u.userid desc limit ${start},${end}
+			</when>
+			<otherwise>
+				order by u.nick_name limit ${start},${end}
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="JobboardSearchCount" resultType="int">
+		select
+		ifnull(count(id),0) 'count'
+		from job_board
+		where enabled=1 and closed=1
+		and title like '%${word}%'
+	</select>
+
+
+	<select id="getExcelUserList"
+		resultType="com.ability.dto.custom.UserDetail">
+		select u.userid as userid, u.nick_name as nick_name
+		,r.role_name as role_name , u.date_created as date_created,
+		u.reputation as reputation, u.last_updated as last_updated,
+		u.user_image as user_image, u.name as name , u.email as email
+		from user
+		u left join role r on u.userid = r.userid order by u.userid
+	</select>
+
+	<update id="changeRole" parameterType="map">
+		<choose>
+			<when test='role == 1'>
+				update role set role_name = "ROLE_USER" where userid = ${userid}
+			</when>
+			<when test='role == 2'>
+				update role set role_name = "ROLE_COMPANY" where userid = ${userid}
+			</when>
+			<otherwise>
+				update role set role_name = "ROLE_ADMIN" where userid = ${userid}
+			</otherwise>
+		</choose>
+	</update>
+
+	<select id="getBanner"
+		resultType="com.ability.dto.custom.BannerList">
+		select distinct b.id as id, count( c.date_created) as
+		click_count,b.file_path as image, b.date_created as date_created,
+		b.title as title, b.connect_url as url, b.client as client,
+		b.banner_desc as banner_desc from banner b left join banner_click c on
+		b.id = c.banner_id where enabled=1 group by b.id
+
+	</select>
+
+	<select id="clickToday" parameterType="java.lang.Integer"
+		resultType="com.ability.dto.custom.BannerClickCountToday">
+		select distinct b.id as id,count(c.date_created) as count
+		from banner b left join banner_click c on b.id = c.banner_id 
+		where c.date_created>curdate() and b.id = #{id} and enabled=1
+        
+	</select>
+
+
+</mapper>

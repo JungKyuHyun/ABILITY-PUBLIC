@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.ReplyCommentMapper">
+	<select id="listSelect" parameterType="map" resultType="com.ability.dto.custom.ReplyCommentCustom">
+		select rc.id 'id', u.user_image 'user_image', 
+						rc.date_created 'date_created', 
+						rc.comment_content 'comment_content', 
+						rc.reply_id 'reply_id', 
+						u.nick_name 'nick_name',
+						rc.userid 'userid',
+						(select ifnull(sum(counta),0) from comment_vote where category_id=1 and comment_id = rc.id) 'counta'
+                		from reply_comment rc left join 
+                			reply r on r.id=rc.reply_id left join 
+                			user u on rc.userid = u.userid left join 
+                			post_board p on p.id = r.board_id
+                where rc.category_id=1 and rc.enabled=1 and p.id=#{id} and rc.reply_id=#{reply_id}
+	</select>
+	<select id="listSelectOne" parameterType="map" resultType="com.ability.dto.Reply_Comment">
+		select comment_content 'comment_content', userid 'userid', id 'id', reply_id 'reply_id' 
+			from reply_comment
+			where id = #{id}
+	</select>
+	
+	<insert id="insertReplyComment" parameterType="map">
+		insert into reply_comment (
+				category_id, 
+				reply_id, 
+				userid, 
+				comment_content
+				)
+			values(
+				1, 
+				#{reply_id}, 
+				#{userid}, 
+				#{comment_content}
+				)	
+	</insert>
+	
+	<update id="updateReplyComment" parameterType="map">
+		update reply_comment 
+			set comment_content=#{comment_content}
+			where id=#{id}
+	</update>
+	
+	<update id="deleteReplyComment" parameterType="map">
+		update reply_comment set enabled=0 where id=#{id}
+	</update>
+	
+	<select id="checkPostCommentVote" resultType="int">
+		select ifnull(sum(counta), 0) 'counta' 
+			from comment_vote 
+			where voter=#{userid} and comment_id=#{seq} and category_id=#{category_id}
+	</select>
+	
+	<insert id="insertPostCommentVote">
+		insert into comment_vote(comment_id, voter, counta, category_id) 
+		values(#{seq}, #{userid}, #{counta}, #{category_id})
+	</insert>
+	
+	<delete id="cancelPostCommentVote">
+		delete from comment_vote
+		where comment_id = #{seq} and voter=#{userid} and category_id=#{category_id}
+	</delete>
+</mapper>
+

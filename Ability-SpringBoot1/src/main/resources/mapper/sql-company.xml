@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.CompanyMapper">
+	<select id="getDetail" parameterType="map" resultType="com.ability.dto.custom.JobBoardDetailList">
+    select j.title 'title',j.subtitle 'subtitle',j.date_created 'date_created',j.period 'period',j.job_type 'job_type',j.scale 'scale',j.job_dept 'job_dept',j.view_count 'view_count' ,
+			c.homepage_url 'homepage_url',c.company_name 'company_name',j.job_time 'job_time',c.manager_tel 'manager_tel',c.company_email 'company_email',c.company_info 'company_info',j.content 'content',c.userid 'userid'
+			,c.xloc 'xloc', c.yloc 'yloc', j.career 'career', c.company_area 'company_area',c.logo 'logo',c.resume 'resume'
+			,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and category_id=4 and boardid=j.id) 'scrap'
+			,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id) 'allscrap',j.tags 'tags',j.email 'email' , j.phone 'phone'   
+    from job_board j
+    left join user_company_detail c
+    on j.userid = c.userid
+    where j.id=#{id}
+	</select>
+	<update id="setCompanyRole">
+		update role set role_name='ROLE_COMPANY' where userid=#{userid}
+	</update>
+	
+	<insert id="insert">
+	<![CDATA[
+		insert into 
+		user_company_detail(userid,
+							company_email,
+							company_name, 
+							company_tel, 
+							manager_tel, 
+							company_area,
+							register_number,
+							register_file,
+							homepage_url,
+							xloc,
+							yloc,
+							resume
+							)
+		values(#{userid},
+			   #{company_email},
+			   #{company_name},
+			   #{company_tel},
+			   #{manager_tel},
+			   #{company_area},
+			   #{register_number},
+			   #{register_file,jdbcType=VARCHAR},
+			   #{homepage_url},
+			   #{xloc},
+			   #{yloc},
+			   '0'
+			   )
+	]]>
+	</insert>
+	<update id="setLogo" parameterType="map">
+		update user_company_detail set logo=#{logo} where userid=#{userid}
+	</update>
+	<update id="setResume" parameterType="map">
+		update user_company_detail set resume=#{resume} where userid=#{userid}
+	</update>
+	<select id="isCompanyEmail" resultType="String">
+			<![CDATA[
+			select company_email 
+			from user_company_detail
+			where company_email=#{company_email} limit 1
+			
+			]]>
+	</select>
+	
+	<insert id="insertCompany" parameterType="map">
+	insert into job_board(userid,
+						title,
+                        content,
+                        tags,
+                        job_type,
+                        job_time,
+                        job_dept,
+                        scale,
+                        email,
+                        phone,
+                        period,
+                        category_id,
+                        subtitle,
+                        career
+                        )
+                        
+				values(	#{userid},
+						#{title},
+                        #{content},
+                        #{tags},
+                        #{job_type},
+                        #{job_time},
+                        #{job_dept},
+                        #{scale},
+                        #{email},
+                        #{phone},
+                        #{period},
+                        4,
+                        #{subtitle},
+                        #{career}
+                        )
+	</insert>
+	
+		<update id="updateJobBoard" parameterType="map">
+	update job_board set
+						userid=#{userid},
+						title=#{title},
+                        content=#{content},
+                        tags=#{tags},
+                        job_type=#{job_type},
+                        job_time=#{job_time},
+                        job_dept=#{job_dept},
+                        email=#{email},
+                        phone=#{phone},
+                        period=#{period},
+                        category_id=4,
+                        subtitle=#{subtitle},
+                        career=#{career}
+                  where id=#{id}
+	</update>
+	
+	<select id="getJobBoard" parameterType="map" resultType="com.ability.dto.custom.HireBoardList">
+    		select j.id 'id'
+			   ,j.title 'title'
+	           ,j.job_type 'job_type'
+	           ,c.company_area 'area'
+	           ,j.tags 'tags'
+	           ,j.view_count 'view_count'
+	           ,j.subtitle 'subtitle'
+	           ,j.date_created 'date_created'
+	           ,j.period 'period'
+	           ,j.userid 'userid'
+	           ,c.company_name 'company_name'
+	           ,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id) 'allscrap'
+	           ,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and category_id=4 and boardid=j.id) 'scrap'  
+		from job_board j
+	    left join user_company_detail c
+	    on j.userid = c.userid
+		where enabled=1 and closed=1
+			<if test='orderby == "0"'>
+				order by j.date_created desc limit ${start},${end}
+			</if>
+			<if test='orderby == "1"'>
+				order by j.view_count desc limit ${start},${end}
+			</if>
+	</select>
+	<select id="getSearchResult" parameterType="map" resultType="com.ability.dto.custom.HireBoardList">
+        		select j.id 'id'
+			   ,j.title 'title'
+	           ,j.job_type 'job_type'
+	           ,c.company_area 'area'
+	           ,j.tags 'tags'
+	           ,j.view_count 'view_count'
+	           ,j.subtitle 'subtitle'
+	           ,j.date_created 'date_created'
+	           ,j.userid 'userid'
+	           ,c.company_name 'company_name'
+	           ,j.category_id 'category_id'
+	           ,j.period 'period'
+	           ,(select ifnull(count(id),0) as allcount from scrap where boardid=j.id) 'allscrap'
+	           ,(select IFNULL(count(id),0) as count from scrap where userid=#{userid} and category_id=4 and boardid=j.id) 'scrap'  
+				from job_board j
+			    left join user_company_detail c
+			    on j.userid = c.userid
+				where enabled=1 and closed=1 and j.title like '%${word}%'
+				order by j.title desc limit ${start},${end}
+	</select>
+	<select id="JobboardSearchCount" resultType="int">
+		select ifnull(count(id),0) 'count'
+		from job_board
+		where enabled=1 and closed=1 and title like '%${word}%'
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(j.id) as counta 
+		from job_board j
+		left join user u
+		on j.userid = u.userid
+		where j.category_id=4 and j.enabled=1 and j.closed=1 and u.enabled=1
+	</select>
+	
+	<select id="getTotalSearchCount" resultType="int">
+		select count(j.id) as counta 
+		from job_board j
+		left join user u
+		on j.userid = u.userid
+		where j.category_id=4 and j.enabled=1 and j.closed=1 and j.title like concat('%',#{word},'%')
+	</select>
+	
+	<update id="UpdateViewCount" parameterType="map">
+		update job_board set view_count= view_count+1 where id=#{id}
+	</update>
+	
+	<update id="delete">
+		update job_board set enabled=0 where id=#{seq}
+	</update>
+	
+	<insert id="setScrap" parameterType="map">
+		insert into scrap(
+						  userid,
+						  boardid,
+						  category_id
+						 )
+				    values(
+				    	  #{userid},
+				    	  #{boardid},
+				    	  #{category_id}
+				    	  )
+	</insert>
+	
+	<select id="getScrap" parameterType="map" resultType="java.lang.Integer">
+			select IFNULL(count(id),0) as count
+			from scrap 
+			where userid=#{userid} and category_id=#{category_id} and boardid=#{boardid}
+	</select>
+	
+	<delete id="deleteScrap" parameterType="map">
+		delete from scrap where userid=#{userid} and category_id=#{category_id} and boardid=#{boardid}
+	</delete>
+</mapper>

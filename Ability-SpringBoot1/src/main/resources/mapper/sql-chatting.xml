@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ability.dao.ChattingMapper">
+	
+	<insert id="insert">
+	<![CDATA[
+	   insert into 
+	   room(room_id,
+	        room_name,
+	        max_people,
+	        tags)
+	  values(#{room_id},
+	         #{room_name},
+	         #{max_people},
+	         #{tags}
+	         )
+	]]>
+	</insert>
+	
+	<select id="getRoomList" resultType="com.ability.dto.ChatRoom">
+	  <![CDATA[
+	   select room_id, room_name, max_people, tags from room where enabled = 1
+	  ]]>
+	</select>
+	
+	<select id="getRoomById" resultType="com.ability.dto.ChatRoom">
+	 <![CDATA[
+	   select 
+	   room_id, room_name, max_people, tags 
+	   from room
+	   where
+	   room_id = #{room_id} and enabled = 1
+	  ]]>
+	</select>
+	
+	<update id="delete">
+	  <![CDATA[
+	   update
+	   room set enabled = 0
+	   where room_id = #{room_id}
+	  ]]>
+	</update>
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ability.dao.DbMapper">
+
+	<select id="getUser" resultType="com.ability.dto.custom.UserSimple">
+	<![CDATA[
+		select u.userid as userid, u.email as email, u.password as password, u.nick_name as nick_name, u.reputation as reputation, u.user_image as user_image, r.role_name as role_name,
+		u.enabled as enabled 
+		from user u 
+		left join role r
+		on u.userid = r.userid
+		where email=#{email} and enabled=1 and confirm=1
+	]]>
+	</select>
+
+	<insert id="signUpUser">
+	<![CDATA[
+		insert into 
+		user(email, password, nick_name, name, area, user_image)
+		values(#{email},#{password},#{nick_name},#{name},#{area},#{user_image})
+	]]>
+	</insert>
+
+	<select id="getSecurityKey" resultType="String">
+	<![CDATA[
+		select c.security_key as security_key
+			from confirm_email c
+			left join user u
+			on c.userid = u.userid
+		where c.userid = (select userid from user where email=#{email} limit 1)
+	]]>
+	</select>
+	
+	<update id="confirmSecurityKey">
+		<![CDATA[
+			update user
+			set confirm = 1
+			where userid = (select userid from confirm_email where security_key=#{security_key})
+		]]>
+	</update>
+	
+	<select id="isOverlapEmail" resultType="int">
+		<![CDATA[
+			select count(userid) 
+			from user
+			where email=#{email}
+		]]>
+	</select>
+	
+	<select id="isOverlapNickName" resultType="int">
+		<![CDATA[
+			select userid 
+			from user
+			where nick_name=#{nickname} limit 1
+		]]>
+	</select>
+	
+	<select id="isExistAccount" resultType="int">
+		select userid
+		from user
+		where email=#{email} and name=#{name}
+	</select>
+	
+	<update id="updateTemporaryPassword">
+		update user
+		set password=#{temporaryPassword}
+		where userid=#{userid}
+	</update>
+	
+	<select id="getReputation" parameterType="int" resultType="com.ability.dto.custom.Reputation">
+		select reputation from user where userid=#{userid}
+	</select>
+	
+</mapper>
