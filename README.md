@@ -133,22 +133,21 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
-## 배포전 번들 사이즈 분석(client)
+## 배포전 번들 사이즈 분석
 
- 현재 가장 큰 파일 크기를 가진 것은 확인해 보니, amchart 모듈이었습니다. 하지만, 아직 이 부분의 이슈가 'Closed'되지 않아 <b>트리 쉐이킹</b>을 할 수 없는 상황이라고 판단하여, 그대로 사용하되 빌드시 압축방식을 변경하여 gzip 방식으로 최대한 압축하였습니다. 실제로 빌드될때 1mb 이상의 파일은 존재 하지 않습니다.
- 
-![image](https://user-images.githubusercontent.com/42884032/62143542-23f90a00-b32b-11e9-90ed-260617992ba1.png)
- 
-<br>
-
-## 배포전 번들 사이즈 분석(front-server)
-![image](https://user-images.githubusercontent.com/42884032/62143551-28bdbe00-b32b-11e9-923b-d21d90e09931.png)
+![bundle_KyuHyun](https://user-images.githubusercontent.com/42884032/62836350-d8d0e680-bc9c-11e9-8408-7215865a6f25.png)
 
 <br>
 
 ## 데몬 & 무중단 배포
 
-![deploy_KyuHyun](https://user-images.githubusercontent.com/42884032/62835834-a670ba80-bc97-11e9-9e33-17b8afdd83c1.png)
+![deploy_KyuHyun](https://user-images.githubusercontent.com/42884032/62836232-2567f200-bc9c-11e9-89ea-1883a18d4052.jpg)
+
+<br>
+
+## 로봇 배제 표준
+
+![robots](https://user-images.githubusercontent.com/42884032/62836286-9c9d8600-bc9c-11e9-9901-6afbe55e9430.jpg)
 
 <br>
 
