@@ -6,8 +6,6 @@
 # ABILITY [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travisci.org/joemccann/dillinger)
 ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 파이널 프로젝트입니다. 6개월간의 배운 것을 총 활용해서 만든 프로젝트이며, 6명의 팀원이 함께 만들었습니다. 하지만, 뷰 라이브러리로 적용한 React는 별도의 스터디를 병행하며 진행한 것이며, 따로 배우지는 않았습니다. 그렇기 때문에 처음 리액트 설계부분에 부족함이 있어, 서버사이드 렌더링을 일부에만 적용했다는가, 리덕스나 리덕스 사가를 모든 페이지에 적용하지 못한 문제가 있습니다. 하지만, 준비 기간이 2개월(실제 코딩기간 45일) 동안 스터디를 병행하며, 한 사이트를 만들었다는 것을 높게 평가해 주시면 좋겠습니다.
 
-
-<br>
 <br>
 
 ## 프로젝트 개요
@@ -16,19 +14,14 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 사용자들은 질문을 통해 개발에 대한 해결방안을 얻고, 답변을 통해 일정한 포인트(능력치)를 얻을 수 있는 사이트 입니다.또한 사용자들은 페이지를 통해 구인을 원하는 기업에 지원할 수 있고, 사용자 간의 채팅도 가능하며, 본인이 만든 프로젝트 영상을 다른 사용자들에게 보여줄 수 있는 공간을 제공합니다.
 
 <br>
-<br>
-<br>
 
 ## 프로젝트 주제 선정 배경
 1. 한국에는 철저히 개발자를 위하며, 질문과 답변 중심의 커뮤니티가 부족하다.
 2. 실제로 우리가 개발을 하면서 필요한 정보를 **쉽게** 찾을 수 있는 사이트가 필요하다.
 3. 내가 만든 프로젝트를 평가 받거나 자랑할 수 있는 공간이 없다.
 4. 6개월 동안 배운 기술을 최대한으로 활용하여 사이트 구축을 할 수 있다.
+
 <br>
-<br>
-
-
-
 
 ## Target
 - 초기 : 개발 입문자 - 영어에 약하고 원하는 정보를 찾을 수 있는 능력이 부족하다.
@@ -53,13 +46,10 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
-<br>
-<br>
-
 ## ABILITY 프론트엔드 사이트 로드맵
 ![ABILITY_Front](https://user-images.githubusercontent.com/42884032/62835412-36603580-bc93-11e9-956d-f0e5903c830d.png)
 
-<br><br>
+<br>
 
 
 ## 아토믹 디자인 패턴 적용 
@@ -67,10 +57,6 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
  리액트로 처음 프로젝트를 진행하다보니, 프로젝트 시작전 폴더 구조의 분할에 대한 공부를 함. 그 중에서 아모믹 디자인 패턴을 적용하여 폴더 구조를 "atoms/, molecules/, organisms/, templates/, pages/"로 구분함. 실제로 느낀 장점은 컴포넌트 분류가 일정한 패턴이라 필요한 컴포넌트를 찾아서 재사용하기 좋음
 
 ![image](https://user-images.githubusercontent.com/42884032/62147835-645c8600-b333-11e9-9db9-c75623e16317.png)
-
-
-<br>
-
 
 ## NEXT.js (프로젝트 중간에 변경) 
 
@@ -104,27 +90,36 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 ![ERD](https://user-images.githubusercontent.com/42884032/62096542-f70f0d80-b2be-11e9-89c3-3645b1aed1ba.jpg)
 
 <br>
-<br>
 
 ## CLOUD COMPUTING
 ![KyuHyun cloud Computing](https://user-images.githubusercontent.com/42884032/62835642-c3a48980-bc95-11e9-8247-77b6dac5069b.png)
-<br>
+
 <br>
 
-## MySQL 사용기술
- -Mybatis : dynamic query (동적 쿼리 적용)
- <br>
- - 스케줄러 1개, 프로시저 1개, 트리거 12개
-![image](https://user-images.githubusercontent.com/42884032/62145032-bbf7f300-b32d-11e9-9bb3-685e2eae85db.png)
+## MySQL 저장 프로시저와 스케줄러
 
+![mysql_KyuHyun](https://user-images.githubusercontent.com/42884032/62835838-b4bed680-bc97-11e9-98c2-f2bb44371c49.png)
+
+<br>
+
+## MySQL Trigger
+
+![trigger](https://user-images.githubusercontent.com/42884032/62835885-580feb80-bc98-11e9-9c18-d0e9f006e20b.jpg)
+
+<br>
+ 
+## Mybatis
+ 
+![mybatis](https://user-images.githubusercontent.com/42884032/62835919-a7561c00-bc98-11e9-9140-c93b2b3ae1aa.png)
 
 <br>
 
 ## 배포전 번들 사이즈 분석(client)
+
+ 현재 가장 큰 파일 크기를 가진 것은 확인해 보니, amchart 모듈이었습니다. 하지만, 아직 이 부분의 이슈가 'Closed'되지 않아 <b>트리 쉐이킹</b>을 할 수 없는 상황이라고 판단하여, 그대로 사용하되 빌드시 압축방식을 변경하여 gzip 방식으로 최대한 압축하였습니다. 실제로 빌드될때 1mb 이상의 파일은 존재 하지 않습니다.
+ 
 ![image](https://user-images.githubusercontent.com/42884032/62143542-23f90a00-b32b-11e9-90ed-260617992ba1.png)
-
- - 현재 가장 큰 파일 크기를 가진 것은 확인해 보니, amchart 모듈이었습니다. 하지만, 아직 이 부분의 이슈가 정리되지 않아 트리 쉐이킹을 할 수 없는 상황이라고 판단하여, 그대로 사용하되 빌드시 압축방식을 변경하여 gzip 방식으로 최대한 압축하였습니다. 실제로 빌드될때 1mb 이상의 파일은 존재 하지 않습니다. 
-
+ 
 <br>
 
 ## 배포전 번들 사이즈 분석(front-server)
@@ -146,12 +141,15 @@ GIT - SourceTree, BASH, ZSH
 
 <br>
 
+## 데몬 & 무중단 배포
+
+![deploy_KyuHyun](https://user-images.githubusercontent.com/42884032/62835834-a670ba80-bc97-11e9-9e33-17b8afdd83c1.png)
+
+<br>
+
 ## 구글 에널리틱스에 의한 추적
 
 ![googleAn](https://user-images.githubusercontent.com/42884032/62835552-c6eb4580-bc94-11e9-88c3-2e5a7c7b63ce.jpg)
-
-
-
 
 <br>
 
@@ -170,9 +168,6 @@ GIT - SourceTree, BASH, ZSH
 
 ## 공통 업무
 기존 프로젝트 분석(프로젝트 및 PPT) 및 문서화, 목업툴을 통한 페이지별 디자인 및 레이아웃 구성, 시나리오 수정
-
-
-
 
 <br>
 
