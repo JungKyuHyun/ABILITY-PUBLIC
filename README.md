@@ -59,7 +59,9 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
  리액트로 처음 프로젝트를 진행하다보니, 프로젝트 시작전 폴더 구조의 분할에 대한 공부를 함. 그 중에서 아모믹 디자인 패턴을 적용하여 폴더 구조를 "atoms/, molecules/, organisms/, templates/, pages/"로 구분함. 실제로 느낀 장점은 컴포넌트 분류가 일정한 패턴이라 필요한 컴포넌트를 찾아서 재사용하기 좋음
 
-![image](https://user-images.githubusercontent.com/42884032/62147835-645c8600-b333-11e9-9db9-c75623e16317.png)
+![atomic](https://user-images.githubusercontent.com/42884032/62836434-af648a80-bc9d-11e9-9cb7-49fa7ac74af4.jpg)
+
+<br>
 
 ## NEXT 프레임 워크 사용
 
