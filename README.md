@@ -154,8 +154,8 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 <br>
 
 ## 형상관리 및 도구
-GIT - SourceTree, BASH, ZSH
-
+Git - SourceTree, BASH, ZSH
+Git Commit Message Convention - 첫 문장(이하 '타이틀')은 영어로 작성한다, 타이틀은 동사로 시작하며 명령문을 유지한다, 타이틀과 본문은 한줄의 간격을 둔다, 본문은 한글로 작성해도 된다
 ![image](https://user-images.githubusercontent.com/42884032/62141283-4557f700-b327-11e9-8335-915f724bae97.png)
 
 <br>
