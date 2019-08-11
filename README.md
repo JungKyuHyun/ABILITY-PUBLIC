@@ -129,16 +129,16 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
+## 데몬 & 무중단 배포
+
+![deploy_KyuHyun](https://user-images.githubusercontent.com/42884032/62835834-a670ba80-bc97-11e9-9e33-17b8afdd83c1.png)
+
+<br>
+
 ## 형상관리 및 도구
 GIT - SourceTree, BASH, ZSH
 
 ![image](https://user-images.githubusercontent.com/42884032/62141283-4557f700-b327-11e9-8335-915f724bae97.png)
-
-<br>
-
-## 데몬 & 무중단 배포
-
-![deploy_KyuHyun](https://user-images.githubusercontent.com/42884032/62835834-a670ba80-bc97-11e9-9e33-17b8afdd83c1.png)
 
 <br>
 
