@@ -163,6 +163,7 @@ Git Commit Message Convention - 첫 문장(이하 '타이틀')은 영어로 작�
 
 ## 이슈 관리
 프로젝트 도중에는 깃을 통한 이슈관리를 시간 관계상 진행하지 않았고, 모든 이슈는 Slack 채널을 활용하며 이슈를 공유했습니다.
+<br>
 하지만, 프로젝트가 종료된 이후에는 이슈 관리 부분을 git의 issues를 활용하여 관리했습니다.
 ![issues](https://user-images.githubusercontent.com/42884032/62837077-fd7d8c00-bca5-11e9-93bb-e04f8ad0367d.jpg)
 
