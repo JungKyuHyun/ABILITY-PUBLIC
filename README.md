@@ -164,7 +164,7 @@ GIT - SourceTree, BASH, ZSH
 
 <br>
 
-## ABILITY 구성원 : 정규현(조장), 신선하, 강기훈, 정진호, 곽호원, 우세림
+## ABILITY 구성원 : 정규현(리더), 신선하, 강기훈, 정진호, 곽호원, 우세림
 - 정규현 : https://github.com/JungKyuHyun/ , https://blog.naver.com/ajdkfl6445 
 - 신선하 : https://github.com/sunha-shin/
 - 강기훈 : https://github.com/alkalisummer
