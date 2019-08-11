@@ -19,9 +19,6 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 <br>
 <br>
 
-
-
-
 ## 프로젝트 주제 선정 배경
 1. 한국에는 철저히 개발자를 위하며, 질문과 답변 중심의 커뮤니티가 부족하다.
 2. 실제로 우리가 개발을 하면서 필요한 정보를 **쉽게** 찾을 수 있는 사이트가 필요하다.
@@ -37,55 +34,7 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 - 초기 : 개발 입문자 - 영어에 약하고 원하는 정보를 찾을 수 있는 능력이 부족하다.
 - 그 이후 : 개발 입문자 & 숙련된 개발자 - 초기부터 사용하고 있는 개발자들을 중심으로 꾸준히 사이트 규모를 늘려나가며, 많은 수의 질문과 답변을 기반으로 더 많은 개발자들을 모은다.
 
-
-
 <br>
-<br>
-
-## ABILITY 프론트엔드 사이트 로드맵
-![ABILITY_Front](https://user-images.githubusercontent.com/42884032/62835412-36603580-bc93-11e9-956d-f0e5903c830d.png)
-<br>
-
-
-- 아토믹 디자인 패턴 적용 => 리액트로 처음 프로젝트를 진행하다보니, 프로젝트 시작전 폴더 구조의 분할에 대한 공부를 함. 그 중에서 아모믹 디자인 패턴을 적용하여 폴더 구조를 "atoms/, molecules/, organisms/, templates/, pages/"로 구분함. 실제로 느낀 장점은 컴포넌트 분류가 일정한 패턴이라 필요한 컴포넌트를 찾아서 재사용하기 좋음
-![image](https://user-images.githubusercontent.com/42884032/62147835-645c8600-b333-11e9-9db9-c75623e16317.png)
-
-
-
-
-
-- NEXT.js 프레임웍 사용(중간에 바꿈) => 코드 스플리팅 및 prefetch 적용
-
-![image](https://user-images.githubusercontent.com/42884032/62148420-a639fc00-b334-11e9-97b7-e2aec7a88879.png)
-
-
-- 서버사이드 렌더링 구현 => 메인 페이지 데이터에 한해서 구현. 이유: 서버사이드 렌더링 구현이 너무 늦게되서 그 동안 만들었던 모든 코드를 뒤엎고 다시 적용할 수가 없었음(시간적 여유 x). 
-![image](https://user-images.githubusercontent.com/42884032/62148540-dc777b80-b334-11e9-947a-0b452e40cbc6.png)
-
-
-- EsLint 사용(프론트에서는 react-recommand, 백엔드 node.js에서는 airbnb 적용)
- 팀원의 코딩스타일을 통일하기 위해 사용
-![eslint](https://user-images.githubusercontent.com/42884032/62835492-3280e300-bc94-11e9-9713-69eb2b0af0e1.jpg)
-<br/>
-
-
-
-## ABILITY 백엔드 사이트 로드맵
-![ABILITY-Back-end](https://user-images.githubusercontent.com/42884032/62835383-dc5f7000-bc92-11e9-8833-cf699bb8849a.png)
-
-
-
-## DATABASE ERD
-![ERD](https://user-images.githubusercontent.com/42884032/62096542-f70f0d80-b2be-11e9-89c3-3645b1aed1ba.jpg)
-<br>
-<br>
-
-## CLOUD COMPUTING
-![image](https://user-images.githubusercontent.com/42884032/62142275-fad77a00-b328-11e9-952f-13f2bb5a5a34.png)
-<br>
-<br>
-
-
 
 ## 프로젝트 기본 설정
 - 기본색 : #5F4B8B(울트라 바이올렛), #F3F3F3(화이트), #242729 (검정)
@@ -100,9 +49,66 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 
 ## URL : www.team-ability.com
-- AWS의 Route53을 통해 구매한 도메인이며, AWS EC2 (ubuntu)서버와 연결했습니다.
-- 이 URL주소는 구글 에널리스틱스를 통해 추적되고 있습니다.
 
+
+<br>
+
+<br>
+<br>
+
+## ABILITY 프론트엔드 사이트 로드맵
+![ABILITY_Front](https://user-images.githubusercontent.com/42884032/62835412-36603580-bc93-11e9-956d-f0e5903c830d.png)
+
+<br><br>
+
+
+## 아토믹 디자인 패턴 적용 
+
+ 리액트로 처음 프로젝트를 진행하다보니, 프로젝트 시작전 폴더 구조의 분할에 대한 공부를 함. 그 중에서 아모믹 디자인 패턴을 적용하여 폴더 구조를 "atoms/, molecules/, organisms/, templates/, pages/"로 구분함. 실제로 느낀 장점은 컴포넌트 분류가 일정한 패턴이라 필요한 컴포넌트를 찾아서 재사용하기 좋음
+
+![image](https://user-images.githubusercontent.com/42884032/62147835-645c8600-b333-11e9-9db9-c75623e16317.png)
+
+
+<br>
+
+
+## NEXT.js (프로젝트 중간에 변경) 
+
+코드 스플리팅 및 prefetch, 원활한 SSR 적용을 위한 next 프레임워크 사용
+
+![image](https://user-images.githubusercontent.com/42884032/62148420-a639fc00-b334-11e9-97b7-e2aec7a88879.png)
+
+<br>
+
+## 서버사이드 렌더링 구현 
+
+메인 페이지 데이터에 한해서 구현. css, data, helmet SSR 적용 
+![image](https://user-images.githubusercontent.com/42884032/62148540-dc777b80-b334-11e9-947a-0b452e40cbc6.png)
+
+<br>
+
+## EsLint 사용
+
+ 팀원의 코딩스타일을 통일하기 위해 사용(프론트에서는 react-recommand, 백엔드 node.js에서는 airbnb 적용)
+![eslint](https://user-images.githubusercontent.com/42884032/62835492-3280e300-bc94-11e9-9713-69eb2b0af0e1.jpg)
+<br/>
+
+
+
+## ABILITY 백엔드 사이트 로드맵
+![ABILITY-Back-end](https://user-images.githubusercontent.com/42884032/62835383-dc5f7000-bc92-11e9-8833-cf699bb8849a.png)
+
+<br>
+
+## DATABASE ERD
+![ERD](https://user-images.githubusercontent.com/42884032/62096542-f70f0d80-b2be-11e9-89c3-3645b1aed1ba.jpg)
+
+<br>
+<br>
+
+## CLOUD COMPUTING
+![KyuHyun cloud Computing](https://user-images.githubusercontent.com/42884032/62835642-c3a48980-bc95-11e9-8247-77b6dac5069b.png)
+<br>
 <br>
 
 ## MySQL 사용기술
@@ -118,6 +124,7 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 ![image](https://user-images.githubusercontent.com/42884032/62143542-23f90a00-b32b-11e9-90ed-260617992ba1.png)
 
  - 현재 가장 큰 파일 크기를 가진 것은 확인해 보니, amchart 모듈이었습니다. 하지만, 아직 이 부분의 이슈가 정리되지 않아 트리 쉐이킹을 할 수 없는 상황이라고 판단하여, 그대로 사용하되 빌드시 압축방식을 변경하여 gzip 방식으로 최대한 압축하였습니다. 실제로 빌드될때 1mb 이상의 파일은 존재 하지 않습니다. 
+
 <br>
 
 ## 배포전 번들 사이즈 분석(front-server)
@@ -138,6 +145,7 @@ GIT - SourceTree, BASH, ZSH
 ![image](https://user-images.githubusercontent.com/42884032/62141283-4557f700-b327-11e9-8335-915f724bae97.png)
 
 <br>
+
 ## 구글 에널리틱스에 의한 추적
 
 ![googleAn](https://user-images.githubusercontent.com/42884032/62835552-c6eb4580-bc94-11e9-88c3-2e5a7c7b63ce.jpg)
