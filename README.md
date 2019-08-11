@@ -127,13 +127,6 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
-## 프론트 서버 및 백엔드 서버 데몬 적용(PM2)
-![image](https://user-images.githubusercontent.com/42884032/62148731-3d9f4f00-b335-11e9-842a-9d0e09ddfa2b.png)
-
-
-<br>
-
-
 ## 형상관리 및 도구
 GIT - SourceTree, BASH, ZSH
 
@@ -161,9 +154,6 @@ GIT - SourceTree, BASH, ZSH
 - 곽호원 : https://github.com/kwakhowon
 - 우세림 : https://github.com/selim0915
 
-
-
-<br>
 <br>
 
 ## 공통 업무
@@ -173,6 +163,7 @@ GIT - SourceTree, BASH, ZSH
 
 
 ## 구성원별 수행 업무
+
 ![image](https://user-images.githubusercontent.com/42884032/62143409-e8f6d680-b32a-11e9-9ddd-b80528b0af76.png)
 
 ![image](https://user-images.githubusercontent.com/42884032/62141002-db3f5200-b326-11e9-83c7-27d7d69b04fc.png)
