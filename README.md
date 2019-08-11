@@ -64,9 +64,8 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 
 - EsLint 사용(프론트에서는 react-recommand, 백엔드 node.js에서는 airbnb 적용)
-
-![image](https://user-images.githubusercontent.com/42884032/62148076-eea4ea00-b333-11e9-8b6c-5175cf574190.png)
-![image](https://user-images.githubusercontent.com/42884032/62148081-f2387100-b333-11e9-88d4-77d6a34e01a7.png)
+ 팀원의 코딩스타일을 통일하기 위해 사용
+![eslint](https://user-images.githubusercontent.com/42884032/62835492-3280e300-bc94-11e9-9713-69eb2b0af0e1.jpg)
 <br/>
 
 
@@ -138,8 +137,9 @@ GIT - SourceTree, BASH, ZSH
 
 ![image](https://user-images.githubusercontent.com/42884032/62141283-4557f700-b327-11e9-8335-915f724bae97.png)
 
-
-
+<br>
+## 구글 에널리틱스에 의한 추적
+![구글에널리틱스](https://user-images.githubusercontent.com/42884032/62835520-71169d80-bc94-11e9-8324-c9be8df0f480.jpg)
 
 
 
