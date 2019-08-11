@@ -40,9 +40,7 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
-
 ## URL : www.team-ability.com
-
 
 <br>
 
@@ -50,7 +48,6 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 ![ABILITY_Front](https://user-images.githubusercontent.com/42884032/62835412-36603580-bc93-11e9-956d-f0e5903c830d.png)
 
 <br>
-
 
 ## 아토믹 디자인 패턴 적용 
 
@@ -73,13 +70,18 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
+## Redux-saga를 활용한 로그인 유지 기능
+
+![login](https://user-images.githubusercontent.com/42884032/62835991-79250c00-bc99-11e9-82b1-51eb43431a6e.png)
+
+<br>
+
 ## EsLint 사용
 
  팀원의 코딩스타일을 통일하기 위해 사용(프론트에서는 react-recommand, 백엔드 node.js에서는 airbnb 적용)
 ![eslint](https://user-images.githubusercontent.com/42884032/62835492-3280e300-bc94-11e9-9713-69eb2b0af0e1.jpg)
+
 <br/>
-
-
 
 ## ABILITY 백엔드 사이트 로드맵
 ![ABILITY-Back-end](https://user-images.githubusercontent.com/42884032/62835383-dc5f7000-bc92-11e9-8833-cf699bb8849a.png)
