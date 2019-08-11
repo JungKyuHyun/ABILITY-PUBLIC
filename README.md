@@ -139,7 +139,9 @@ GIT - SourceTree, BASH, ZSH
 
 <br>
 ## 구글 에널리틱스에 의한 추적
-![구글에널리틱스](https://user-images.githubusercontent.com/42884032/62835520-71169d80-bc94-11e9-8324-c9be8df0f480.jpg)
+
+![googleAn](https://user-images.githubusercontent.com/42884032/62835552-c6eb4580-bc94-11e9-88c3-2e5a7c7b63ce.jpg)
+
 
 
 
