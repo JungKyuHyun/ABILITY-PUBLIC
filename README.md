@@ -63,10 +63,9 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
-## 서버사이드 렌더링 구현 
+## 서버사이드 렌더링(SSR)
 
-메인 페이지 데이터에 한해서 구현. css, data, helmet SSR 적용 
-![image](https://user-images.githubusercontent.com/42884032/62148540-dc777b80-b334-11e9-947a-0b452e40cbc6.png)
+![SSR](https://user-images.githubusercontent.com/42884032/62836049-29931000-bc9a-11e9-8f21-2973d323bfb9.png)
 
 <br>
 
