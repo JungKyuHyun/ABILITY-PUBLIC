@@ -49,13 +49,19 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
+## 통계 데이터 활용
+
+![data](https://user-images.githubusercontent.com/42884032/62836109-e08f8b80-bc9a-11e9-9e26-652e94faffb2.png)
+
+<br>
+
 ## 아토믹 디자인 패턴 적용 
 
  리액트로 처음 프로젝트를 진행하다보니, 프로젝트 시작전 폴더 구조의 분할에 대한 공부를 함. 그 중에서 아모믹 디자인 패턴을 적용하여 폴더 구조를 "atoms/, molecules/, organisms/, templates/, pages/"로 구분함. 실제로 느낀 장점은 컴포넌트 분류가 일정한 패턴이라 필요한 컴포넌트를 찾아서 재사용하기 좋음
 
 ![image](https://user-images.githubusercontent.com/42884032/62147835-645c8600-b333-11e9-9db9-c75623e16317.png)
 
-## NEXT.js (프로젝트 중간에 변경) 
+## NEXT 프레임 워크 사용
 
 코드 스플리팅 및 prefetch, 원활한 SSR 적용을 위한 next 프레임워크 사용
 
@@ -63,9 +69,21 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
+## IE 최적화
+
+![ie_polyfill](https://user-images.githubusercontent.com/42884032/62836077-973f3c00-bc9a-11e9-9975-27e7fe4d70ba.png)
+
+<br>
+
 ## 서버사이드 렌더링(SSR)
 
 ![SSR](https://user-images.githubusercontent.com/42884032/62836049-29931000-bc9a-11e9-8f21-2973d323bfb9.png)
+
+<br>
+
+## Redux-Reducer 설계
+
+![redux_reducer_kyuhyun](https://user-images.githubusercontent.com/42884032/62836182-893deb00-bc9b-11e9-80d9-eee98aea8b65.jpg)
 
 <br>
 
