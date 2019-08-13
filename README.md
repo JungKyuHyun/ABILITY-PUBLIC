@@ -112,11 +112,6 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
-## CLOUD COMPUTING
-![KyuHyun cloud Computing](https://user-images.githubusercontent.com/42884032/62835642-c3a48980-bc95-11e9-8247-77b6dac5069b.png)
-
-<br>
-
 ## MySQL 저장 프로시저와 스케줄러
 
 ![mysql_KyuHyun](https://user-images.githubusercontent.com/42884032/62835838-b4bed680-bc97-11e9-98c2-f2bb44371c49.png)
@@ -132,6 +127,11 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 ## Mybatis
  
 ![mybatis](https://user-images.githubusercontent.com/42884032/62835919-a7561c00-bc98-11e9-9140-c93b2b3ae1aa.png)
+
+<br>
+
+## CLOUD COMPUTING
+![KyuHyun cloud Computing](https://user-images.githubusercontent.com/42884032/62835642-c3a48980-bc95-11e9-8247-77b6dac5069b.png)
 
 <br>
 
