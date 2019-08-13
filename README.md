@@ -55,6 +55,7 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
   - 메인 배너에 대한 클릭 수 또한 통계 데이터로 수집하며, 광고 수익 구조는 CPC 방식으로 계산 해보았습니다.
+<br>
 
 ![banner](https://user-images.githubusercontent.com/42884032/62939209-b27d8900-be0b-11e9-8275-ea64ce527c8b.jpg)
 
