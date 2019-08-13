@@ -83,6 +83,13 @@ ABILITY는 약 1개월 동안 준비한 비트캠프 3조(팀명: ABILITY)의 �
 
 <br>
 
+## 서버사이드 렌더링(SSR) 개선
+기존의 서버 사이드 렌더링의 문제는 데이터만 서버에서 렌더링이 먼저 되기 때문에, 최초 접속시 혹은 새로 고침시 CSS가 깨지거나 흔들리는 현상이 나타났습니다. 여기에 대한 개선책으로 styled-components를 사용하고 styled-components에 SSR을 적용했습니다.
+
+![serverside-rendering](https://user-images.githubusercontent.com/42884032/62938244-a264aa00-be09-11e9-9566-b05be3607391.jpg)
+
+<br>
+
 ## Redux-Reducer 설계
 
 ![redux_reducer_kyuhyun](https://user-images.githubusercontent.com/42884032/62836182-893deb00-bc9b-11e9-80d9-eee98aea8b65.jpg)
