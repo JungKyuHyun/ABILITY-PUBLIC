@@ -39,7 +39,7 @@
     "immutable": "^4.0.0-rc.12",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
-    "next": "^8.1.0",
+    "next": "^9.3.3",
     "next-redux-saga": "^4.0.2",
     "next-redux-wrapper": "^3.0.0-alpha.3",
     "node-sass": "^4.12.0",
